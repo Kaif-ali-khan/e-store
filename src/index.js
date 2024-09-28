@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoginPage from "./Screens/Login";
 import NavBar from "./Components/NavBar";
 import Home from "./Screens/Home";
+import Register from "./Screens/Register";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,14 @@ const router = createBrowserRouter([
       </>
     ),
   },
+  {
+    path: "/register",
+    element: (
+      <>
+        <Register />
+      </>
+    ),
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

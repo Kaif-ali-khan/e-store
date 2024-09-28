@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const obj = {
   email: "kaif@gmail.com",
@@ -10,6 +11,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState();
 
+  const navigate = useNavigate();
+
   const onLogin = () => {
     let isEmailCorrect = userEmail === obj.email;
     console.log("isEmailCorrect", isEmailCorrect);
@@ -20,6 +23,9 @@ const LoginPage = () => {
         msg: "Login successful",
         color: "#00ff00",
       });
+
+      navigate("/")
+
     } else {
       setMessage({
         msg: "Wrong Credentials",
@@ -99,19 +105,23 @@ const LoginPage = () => {
           </a>
         </div>
 
+        {/* <Link to={"/"}> */}
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
           onClick={onLogin}
+          disabled={userEmail.length < 3 && password.length < 6}
         >
           Login
         </button>
+        {/* </Link> */}
+
         {/* </form> */}
 
         <div className="mt-6 text-blue-500 text-center">
-          <a href="#" className="hover:underline">
+          <Link to={"/register"} className="hover:underline">
             Sign up Here
-          </a>
+          </Link>
           <br />
 
           {message ? (
