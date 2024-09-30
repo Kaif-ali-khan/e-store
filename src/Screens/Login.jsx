@@ -3,15 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { HOME_PATH, SIGNUP_PATH } from "../Utils/constants";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const [userEmail, setUserEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState();
 
-  const navigate = useNavigate();
-
   const onLogin = () => {
     let userData = JSON.parse(localStorage.getItem("userData"));
     console.log("userData", userData);
+
     let isEmailCorrect = userEmail === userData.email;
     console.log("isEmailCorrect", isEmailCorrect);
     let isPasswordCorrect = password === userData.password;
@@ -22,12 +23,15 @@ const LoginPage = () => {
         color: "#00ff00",
       });
 
+      localStorage.setItem("isLogin", "true");
+
       navigate(HOME_PATH);
     } else {
       setMessage({
         msg: "Wrong Credentials",
         color: "#FF0000",
       });
+      localStorage.setItem("isLogin", "false");
     }
   };
 

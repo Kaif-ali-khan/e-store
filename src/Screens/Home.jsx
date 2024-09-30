@@ -7,6 +7,7 @@ const Home = () => {
   const [productsData, setProductsData] = useState([]);
   const [showMessage, setshowMessage] = useState(false);
   const [showLoader, setShowLoader] = useState(true);
+
   useEffect(() => {
     getData();
   }, []);
@@ -24,23 +25,16 @@ const Home = () => {
     }
   };
 
-  // .then((res) => {
-  //   console.log(res);
-  //   setProductsData(res.data);
-  // })
-  // .catch((err) => {
-  //   console.log(err);
-  //   setshowMessage(true);
-  // });
   return (
     <>
+    
       {showLoader ? (
         <div
           role="status"
           className="flex flex-row min-h-screen justify-center items-center"
         >
           <Loader />
-          <span class="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span>
         </div>
       ) : null}
 
@@ -49,11 +43,11 @@ const Home = () => {
           ? productsData?.map((card) => (
               <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a href="#">
-                  <img class="p-8 rounded-t-lg w-40" src={card.image} />
+                  <img className="p-8 rounded-t-lg w-40" src={card.image} />
                 </a>
                 <div className="px-5 pb-5">
                   <a href="#">
-                    <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                       {card.title}
                     </h5>
                   </a>
@@ -110,12 +104,12 @@ const Home = () => {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span class="text-3xl font-bold text-gray-900 dark:text-white">
+                    <span className="text-3xl font-bold text-gray-900 dark:text-white">
                       {card.price}
                     </span>
                     <a
                       href="#"
-                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       Add to cart
                     </a>

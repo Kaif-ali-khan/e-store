@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         <Register />
       </>
     ),
-  }
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

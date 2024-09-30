@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { LOGIN_PATH } from "../Utils/constants";
 
 const Register = () => {
+  
+  const navigate = useNavigate();
+
   const [userName, setUserName] = useState("");
   const [userPhone, setUserPhone] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userConfirmPassword, setUserConfirmPassword] = useState("");
-
-  const navigate = useNavigate();
 
   const onRegister = () => {
     const userDataLocalStorage = () => {
