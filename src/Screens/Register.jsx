@@ -1,43 +1,69 @@
+import { Name } from "ajv";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { LOGIN_PATH } from "../Utils/constants";
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confrimPassword, setConfrimPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userPhone, setUserPhone] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [userConfirmPassword, setUserConfirmPassword] = useState("");
 
+  const navigate = useNavigate();
+
+  const onRegister = () => {
+    const userDataLocalStorage = () => {
+      const userDataObj = {
+        name: userName,
+        phone: userPhone,
+        email: userEmail,
+        password: userPassword,
+      };
+      const strObj = JSON.stringify(userDataObj);
+      localStorage.setItem("userData", strObj);
+    };
+
+    let isConfirmPasswordSame = userPassword === userConfirmPassword;
+
+    if (userName && userPhone && userEmail && isConfirmPasswordSame) {
+      alert("signup");
+      navigate(LOGIN_PATH);
+      userDataLocalStorage();
+    } else {
+      alert("not Sign up");
+    }
+  };
   const onChangeName = (e) => {
     let inputText = e.target.value;
     console.log(inputText);
-    setName(inputText);
+    setUserName(inputText);
   };
 
   const onChangePhone = (e) => {
     let inputText = e.target.value;
     console.log(inputText);
-    setPhone(inputText);
+    setUserPhone(inputText);
   };
 
   const onChangeEmail = (e) => {
     let inputText = e.target.value;
     console.log(inputText);
-    setEmail(inputText);
+    setUserEmail(inputText);
   };
 
   const onChangePassword = (e) => {
     let inputText = e.target.value;
     console.log(inputText);
-    setPassword(inputText);
+    setUserPassword(inputText);
   };
 
   const onChangeConfirmPassword = (e) => {
     let inputText = e.target.value;
     console.log(inputText);
-    setConfrimPassword(inputText);
+    setUserConfirmPassword(inputText);
   };
 
-  const onRegister = () => {};
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -49,7 +75,7 @@ const Register = () => {
             <form className="space-y-4 md:space-y-6 " action="#">
               <div>
                 <label
-                  for="name"
+                  htmlFor="name"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Name
@@ -66,7 +92,7 @@ const Register = () => {
               </div>
               <div>
                 <label
-                  for="number"
+                  htmlFor="number"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Phone
@@ -84,7 +110,7 @@ const Register = () => {
 
               <div>
                 <label
-                  for="email"
+                  htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Your email
@@ -101,7 +127,7 @@ const Register = () => {
               </div>
               <div>
                 <label
-                  for="password"
+                  htmlFor="password"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Password
@@ -118,7 +144,7 @@ const Register = () => {
               </div>
               <div>
                 <label
-                  for="confirm-password"
+                  htmlFor="confirm-password"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Confirm password
@@ -145,7 +171,7 @@ const Register = () => {
                 </div>
                 <div className="ml-3 text-sm">
                   <label
-                    for="terms"
+                    htmlFor="terms"
                     className="font-light text-gray-500 dark:text-gray-300"
                   >
                     I accept the{" "}

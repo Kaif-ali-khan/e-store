@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-const obj = {
-  email: "kaif@gmail.com",
-  password: "helloWorld",
-};
+import { HOME_PATH, SIGNUP_PATH } from "../Utils/constants";
 
 const LoginPage = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -14,9 +10,11 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const onLogin = () => {
-    let isEmailCorrect = userEmail === obj.email;
+    let userData = JSON.parse(localStorage.getItem("userData"));
+    console.log("userData", userData);
+    let isEmailCorrect = userEmail === userData.email;
     console.log("isEmailCorrect", isEmailCorrect);
-    let isPasswordCorrect = password === obj.password;
+    let isPasswordCorrect = password === userData.password;
 
     if (isEmailCorrect && isPasswordCorrect) {
       setMessage({
@@ -24,8 +22,7 @@ const LoginPage = () => {
         color: "#00ff00",
       });
 
-      navigate("/")
-
+      navigate(HOME_PATH);
     } else {
       setMessage({
         msg: "Wrong Credentials",
@@ -105,7 +102,6 @@ const LoginPage = () => {
           </a>
         </div>
 
-        {/* <Link to={"/"}> */}
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full"
@@ -114,12 +110,11 @@ const LoginPage = () => {
         >
           Login
         </button>
-        {/* </Link> */}
 
         {/* </form> */}
 
         <div className="mt-6 text-blue-500 text-center">
-          <Link to={"/register"} className="hover:underline">
+          <Link to={SIGNUP_PATH} className="hover:underline">
             Sign up Here
           </Link>
           <br />

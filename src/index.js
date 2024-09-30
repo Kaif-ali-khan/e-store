@@ -7,10 +7,11 @@ import LoginPage from "./Screens/Login";
 import NavBar from "./Components/NavBar";
 import Home from "./Screens/Home";
 import Register from "./Screens/Register";
+import { HOME_PATH, LOGIN_PATH, SIGNUP_PATH } from "./Utils/constants";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: HOME_PATH,
     element: (
       <>
         <NavBar /> <Home />
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/login",
+    path: LOGIN_PATH,
     element: (
       <>
         <LoginPage />
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/register",
+    path: SIGNUP_PATH,
     element: (
       <>
         <Register />
