@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../Assets/svg/loader";
 import Login from "./Login";
+import { Link } from "react-router-dom";
+import { PRODUCTDETAILS_PATH } from "../Utils/constants";
 
 const Home = () => {
   const [productsData, setProductsData] = useState([]);
@@ -27,7 +29,6 @@ const Home = () => {
 
   return (
     <>
-    
       {showLoader ? (
         <div
           role="status"
@@ -42,9 +43,9 @@ const Home = () => {
         {productsData?.length
           ? productsData?.map((card) => (
               <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                <a href="#">
+                <Link to={PRODUCTDETAILS_PATH(card.id)}>
                   <img className="p-8 rounded-t-lg w-40" src={card.image} />
-                </a>
+                </Link>
                 <div className="px-5 pb-5">
                   <a href="#">
                     <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">

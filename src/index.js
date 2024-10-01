@@ -7,7 +7,13 @@ import LoginPage from "./Screens/Login";
 import NavBar from "./Components/NavBar";
 import Home from "./Screens/Home";
 import Register from "./Screens/Register";
-import { HOME_PATH, LOGIN_PATH, SIGNUP_PATH } from "./Utils/constants";
+import {
+  HOME_PATH,
+  LOGIN_PATH,
+  SIGNUP_PATH,
+  PRODUCTDETAILS_PATH,
+} from "./Utils/constants";
+import ProductDetails from "./Screens/ProductDetails";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +37,14 @@ const router = createBrowserRouter([
     element: (
       <>
         <Register />
+      </>
+    ),
+  },
+  {
+    path: PRODUCTDETAILS_PATH(), // "/productdetails/:id"
+    element: (
+      <>
+        <ProductDetails />
       </>
     ),
   },
