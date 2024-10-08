@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HOME_PATH, SIGNUP_PATH } from "../Utils/constants";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Components/firebase";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -9,31 +11,45 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState();
 
-  const onLogin = () => {
-    let userData = JSON.parse(localStorage.getItem("userData"));
-    console.log("userData", userData);
-
-    let isEmailCorrect = userEmail === userData.email;
-    console.log("isEmailCorrect", isEmailCorrect);
-    let isPasswordCorrect = password === userData.password;
-
-    if (isEmailCorrect && isPasswordCorrect) {
-      setMessage({
-        msg: "Login successful",
-        color: "#00ff00",
-      });
-
-      localStorage.setItem("isLogin", "true");
-
+  const onLogin = async () => {
+    try {
+      const firebaseLogin = await signInWithEmailAndPassword(
+        auth,
+        userEmail,
+        password
+      );
+      console.log("user logged in", firebaseLogin);
       navigate(HOME_PATH);
-    } else {
-      setMessage({
-        msg: "Wrong Credentials",
-        color: "#FF0000",
-      });
-      localStorage.setItem("isLogin", "false");
+    } catch (error) {
+      console.log(error.message);
     }
   };
+
+  // const onLogin = () => {
+  //   let userData = JSON.parse(localStorage.getItem("userData"));
+  //   console.log("userData", userData);
+
+  //   let isEmailCorrect = userEmail === userData.email;
+  //   console.log("isEmailCorrect", isEmailCorrect);
+  //   let isPasswordCorrect = password === userData.password;
+
+  //   if (isEmailCorrect && isPasswordCorrect) {
+  //     setMessage({
+  //       msg: "Login successful",
+  //       color: "#00ff00",
+  //     });
+
+  //     localStorage.setItem("isLogin", "true");
+
+  //     navigate(HOME_PATH);
+  //   } else {
+  //     setMessage({
+  //       msg: "Wrong Credentials",
+  //       color: "#FF0000",
+  //     });
+  //     localStorage.setItem("isLogin", "false");
+  //   }
+  // };
 
   const onChangeEmail = (e) => {
     let inputText = e.target.value;

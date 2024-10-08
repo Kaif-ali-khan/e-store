@@ -2,39 +2,66 @@ import { Name } from "ajv";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LOGIN_PATH } from "../Utils/constants";
+import { auth, db } from "../Components/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
 
 const Register = () => {
-  
   const navigate = useNavigate();
 
   const [userName, setUserName] = useState("");
   const [userPhone, setUserPhone] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
-  const [userConfirmPassword, setUserConfirmPassword] = useState("");
+  // const [userConfirmPassword, setUserConfirmPassword] = useState("");
 
-  const onRegister = () => {
-    const userDataLocalStorage = () => {
-      const userDataObj = {
-        name: userName,
-        phone: userPhone,
-        email: userEmail,
-        password: userPassword,
-      };
-      const strObj = JSON.stringify(userDataObj);
-      localStorage.setItem("userData", strObj);
-    };
-
-    let isConfirmPasswordSame = userPassword === userConfirmPassword;
-
-    if (userName && userPhone && userEmail && isConfirmPasswordSame) {
-      alert("signup");
-      navigate(LOGIN_PATH);
-      userDataLocalStorage();
-    } else {
-      alert("not Sign up");
+  const onRegister = async () => {
+    try {
+      const firebaseData = await createUserWithEmailAndPassword(
+        auth,
+        userEmail,
+        userPassword
+      );
+      console.log("firebaseData", firebaseData);
+      const user = auth.currentUser;
+      console.log("user", user);
+      console.log("user Successfull", user.userEmail);
+      if (user) {
+        await setDoc(doc(db, "Users", user.uid), {
+          name: userName,
+          phone: userPhone,
+          email: userEmail,
+          password: userPassword,
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
+
+  // const onRegister = () => {
+  //   const userDataLocalStorage = () => {
+  //     const userDataObj = {
+  //       name: userName,
+  //       phone: userPhone,
+  //       email: userEmail,
+  //       password: userPassword,
+  //     };
+  //     const strObj = JSON.stringify(userDataObj);
+  //     localStorage.setItem("userData", strObj);
+  //   };
+
+  //   let isConfirmPasswordSame = userPassword === userConfirmPassword;
+
+  //   if (userName && userPhone && userEmail && isConfirmPasswordSame) {
+  //     alert("signup");
+  //     navigate(LOGIN_PATH);
+  //     userDataLocalStorage();
+  //   } else {
+  //     alert("not Sign up");
+  //   }
+  // };
+
   const onChangeName = (e) => {
     let inputText = e.target.value;
     console.log(inputText);
@@ -59,11 +86,11 @@ const Register = () => {
     setUserPassword(inputText);
   };
 
-  const onChangeConfirmPassword = (e) => {
-    let inputText = e.target.value;
-    console.log(inputText);
-    setUserConfirmPassword(inputText);
-  };
+  // const onChangeConfirmPassword = (e) => {
+  //   let inputText = e.target.value;
+  //   console.log(inputText);
+  //   setUserConfirmPassword(inputText);
+  // };
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -143,7 +170,7 @@ const Register = () => {
                   onChange={onChangePassword}
                 />
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="confirm-password"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -184,7 +211,7 @@ const Register = () => {
                     </a>
                   </label>
                 </div>
-              </div>
+              </div> */}
               <button
                 type="submit"
                 className="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"

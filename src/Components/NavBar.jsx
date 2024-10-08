@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { HOME_PATH, LOGIN_PATH } from "../Utils/constants";
 import { useState, useEffect } from "react";
+// import { doc, getDoc } from "firebase/firestore";
+// import { auth, db } from "../Components/firebase";
 
 const NavBar = () => {
   const [loginStatus, setLoginStatus] = useState();
+  // const [currentUsername, setCurrentUsername] = useState(null);
 
   useEffect(() => {
     let isLoginCheck = localStorage.getItem("isLogin");
@@ -14,8 +17,25 @@ const NavBar = () => {
   const logout = () => {
     setLoginStatus(false);
     console.log("logouted");
-    localStorage.setItem("isLogin", "false");
   };
+
+  // const showUser = async () => {
+  //   auth.onAuthStateChanged(async (user) => {
+  //     console.log("showuser-user", user);
+  //     const docRef = doc(db, "Users", user.uid);
+  //     const docSnap = await getDoc(docRef);
+  //     if (docSnap.exists()) {
+  //       setCurrentUsername(docSnap.data());
+  //       console.log("docsnap.data", docSnap.data());
+  //     } else {
+  //       console.log("user logged in");
+  //     }
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   showUser();
+  // }, []);
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
@@ -55,6 +75,11 @@ const NavBar = () => {
         <div className="hidden w-full md:block md:w-auto" id="navbar-dropdown">
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
+              {/* <li>
+                <h3 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+                  {currentUsername}
+                </h3>
+              </li> */}
               {loginStatus ? (
                 <p
                   onClick={logout}
