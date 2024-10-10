@@ -3,6 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { HOME_PATH, SIGNUP_PATH } from "../Utils/constants";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../Components/firebase";
+import { useDispatch } from "react-redux";
+import { saveUser } from "../features/login";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../Components/firebase";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -11,6 +15,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState();
 
+  const dispatch = useDispatch();
+
   const onLogin = async () => {
     try {
       const firebaseLogin = await signInWithEmailAndPassword(
@@ -18,48 +24,29 @@ const LoginPage = () => {
         userEmail,
         password
       );
-      console.log("user logged in", firebaseLogin);
+
+      const docRef = doc(db, "Users", firebaseLogin?.user?.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        dispatch(saveUser(docSnap?.data()));
+      } else {
+        console.log("No such document!");
+      }
+
       navigate(HOME_PATH);
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  // const onLogin = () => {
-  //   let userData = JSON.parse(localStorage.getItem("userData"));
-  //   console.log("userData", userData);
-
-  //   let isEmailCorrect = userEmail === userData.email;
-  //   console.log("isEmailCorrect", isEmailCorrect);
-  //   let isPasswordCorrect = password === userData.password;
-
-  //   if (isEmailCorrect && isPasswordCorrect) {
-  //     setMessage({
-  //       msg: "Login successful",
-  //       color: "#00ff00",
-  //     });
-
-  //     localStorage.setItem("isLogin", "true");
-
-  //     navigate(HOME_PATH);
-  //   } else {
-  //     setMessage({
-  //       msg: "Wrong Credentials",
-  //       color: "#FF0000",
-  //     });
-  //     localStorage.setItem("isLogin", "false");
-  //   }
-  // };
-
   const onChangeEmail = (e) => {
     let inputText = e.target.value;
-    console.log(inputText);
     setUserEmail(inputText);
   };
 
   const onChangePassword = (e) => {
     let inputText = e.target.value;
-    console.log(inputText);
     setPassword(inputText);
   };
 

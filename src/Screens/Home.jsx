@@ -42,7 +42,10 @@ const Home = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-10 m-8">
         {productsData?.length
           ? productsData?.map((card) => (
-              <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+              <div
+                className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                key={card.id}
+              >
                 <Link to={PRODUCTDETAILS_PATH(card.id)}>
                   <img className="p-8 rounded-t-lg w-40" src={card.image} />
                 </Link>

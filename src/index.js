@@ -7,6 +7,10 @@ import LoginPage from "./Screens/Login";
 import NavBar from "./Components/NavBar";
 import Home from "./Screens/Home";
 import Register from "./Screens/Register";
+import { Provider } from "react-redux";
+import { store, persistor } from "./app/store";
+import { PersistGate } from "redux-persist/integration/react";
+
 import {
   HOME_PATH,
   LOGIN_PATH,
@@ -53,7 +57,11 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <RouterProvider router={router} />
+      </PersistGate>
+    </Provider>
   </React.StrictMode>
 );
 
