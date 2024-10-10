@@ -16,8 +16,10 @@ import {
   LOGIN_PATH,
   SIGNUP_PATH,
   PRODUCTDETAILS_PATH,
+  PRODUCT_FORM,
 } from "./Utils/constants";
 import ProductDetails from "./Screens/ProductDetails";
+import AddProductForm from "./Screens/AddProductForm";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +51,14 @@ const router = createBrowserRouter([
     element: (
       <>
         <ProductDetails />
+      </>
+    ),
+  },
+  {
+    path: PRODUCT_FORM,
+    element: (
+      <>
+        <AddProductForm />
       </>
     ),
   },

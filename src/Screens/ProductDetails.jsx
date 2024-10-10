@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Loader from "../Assets/svg/loader";
+import NavBar from "../Components/NavBar";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -38,6 +39,7 @@ const ProductDetails = () => {
 
   return (
     <>
+      <NavBar />
       {showLoader ? (
         <div
           role="status"
