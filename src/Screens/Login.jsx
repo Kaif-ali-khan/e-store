@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HOME_PATH, SIGNUP_PATH } from "../Utils/constants";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword} from "firebase/auth";
 import { auth } from "../Components/firebase";
 import { useDispatch } from "react-redux";
 import { saveUser } from "../features/login";
@@ -24,6 +24,7 @@ const LoginPage = () => {
         userEmail,
         password
       );
+      console.log("firebaseLogin",firebaseLogin)
 
       const docRef = doc(db, "Users", firebaseLogin?.user?.uid);
       const docSnap = await getDoc(docRef);

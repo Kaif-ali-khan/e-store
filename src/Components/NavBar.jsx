@@ -2,14 +2,22 @@ import { Link } from "react-router-dom";
 import { HOME_PATH, LOGIN_PATH } from "../Utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../features/login";
+import { signOut } from "firebase/auth";
+import { auth } from "./firebase";
 
 const NavBar = () => {
   const state = useSelector((state) => state?.login);
 
   const dispatch = useDispatch();
 
-  const logout = () => {
+  const logout = async () => {
     dispatch(removeUser());
+
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
