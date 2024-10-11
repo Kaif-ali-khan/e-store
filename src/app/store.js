@@ -29,7 +29,7 @@ const loginPersistConfig = {
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, api.reducer);
+// const persistedReducer = persistReducer(persistConfig, api.reducer);
 const persistedLoginReducer = persistReducer(
   loginPersistConfig,
   loginSliceReducer
