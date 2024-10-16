@@ -17,9 +17,12 @@ import {
   SIGNUP_PATH,
   PRODUCTDETAILS_PATH,
   PRODUCT_FORM,
+  PRODUCT_TABLE,
+  ADDPRODUCT_FORM,
 } from "./Utils/constants";
 import ProductDetails from "./Screens/ProductDetails";
 import AddProductForm from "./Screens/AddProductForm";
+import ProductTable from "./Screens/ProductTable";
 
 const router = createBrowserRouter([
   {
@@ -55,10 +58,28 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: PRODUCT_FORM,
+    path: PRODUCT_FORM(),
     element: (
       <>
         <AddProductForm />
+      </>
+    ),
+  },
+
+  {
+    path: ADDPRODUCT_FORM,
+    element: (
+      <>
+        <AddProductForm />
+      </>
+    ),
+  },
+
+  {
+    path: PRODUCT_TABLE,
+    element: (
+      <>
+        <ProductTable />
       </>
     ),
   },

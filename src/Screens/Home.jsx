@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../Assets/svg/loader";
-import Login from "./Login";
 import { Link } from "react-router-dom";
 import { PRODUCTDETAILS_PATH } from "../Utils/constants";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../Components/firebase";
 
 const Home = () => {
   const [productsData, setProductsData] = useState([]);
@@ -11,21 +12,33 @@ const Home = () => {
   const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
-    getData();
+    // getData();
+    getFirebaseData();
   }, []);
 
-  const getData = async () => {
+  const getFirebaseData = async () => {
     try {
-      let api = await axios.get("https://fakestoreapi.com/products");
+      const data = await getDocs(collection(db, "Products"));
+      const pdata = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setProductsData(pdata);
       setShowLoader(false);
-      let data = api.data;
-      setProductsData(data);
-    } catch (err) {
-      console.log("err", err);
-      setshowMessage(true);
+    } catch (error) {
       setShowLoader(false);
     }
   };
+
+  // const getData = async () => {
+  //   try {
+  //     let api = await axios.get("https://fakestoreapi.com/products");
+  //     setShowLoader(false);
+  //     let data = api.data;
+  //     setProductsData(data);
+  //   } catch (err) {
+  //     console.log("err", err);
+  //     setshowMessage(true);
+  //     setShowLoader(false);
+  //   }
+  // };
 
   return (
     <>
@@ -47,7 +60,7 @@ const Home = () => {
                 key={card.id}
               >
                 <Link to={PRODUCTDETAILS_PATH(card.id)}>
-                  <img className="p-8 rounded-t-lg w-40" src={card.image} />
+                  <img className="p-8 rounded-t-lg w-40" src={card.imageUrl} />
                 </Link>
                 <div className="px-5 pb-5">
                   <a href="#">
@@ -55,7 +68,7 @@ const Home = () => {
                       {card.title}
                     </h5>
                   </a>
-                  <div className="flex items-center mt-2.5 mb-5">
+                  {/* <div className="flex items-center mt-2.5 mb-5">
                     <div className="flex items-center space-x-1 rtl:space-x-reverse">
                       <svg
                         className="w-4 h-4 text-yellow-300"
@@ -106,7 +119,7 @@ const Home = () => {
                     <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">
                       5.0
                     </span>
-                  </div>
+                  </div> */}
                   <div className="flex items-center justify-between">
                     <span className="text-3xl font-bold text-gray-900 dark:text-white">
                       {card.price}

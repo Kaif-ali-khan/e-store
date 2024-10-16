@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import Loader from "../Assets/svg/loader";
 import NavBar from "../Components/NavBar";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../Components/firebase";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -12,30 +13,49 @@ const ProductDetails = () => {
   const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
-    getSingleData();
+    // getSingleData();
+    getFirebaseSingleProductDetails();
   }, []);
 
-  const getSingleData = async () => {
+  const getFirebaseSingleProductDetails = async () => {
     try {
-      let api = await axios.get(`https://fakestoreapi.com/products/${id}`);
-      let data = api.data;
+      const docRef = doc(db, "Products", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", setSingleProduct(docSnap.data()));
+      } else {
+        console.log("No such document!");
+      }
+
       setShowLoader(false);
-      let updateObject = {
-        ...data,
-        roundedRating: Math.round(data.rating.rate),
-      };
-      setSingleProduct(updateObject);
-      console.log("data", data);
-    } catch (err) {
-      console.log("err", err);
+    } catch (error) {
+      console.log(error)
       setShowLoader(false);
     }
   };
 
-  let numberOfSvgsArray = singleProduct?.rating.rate
-    ? new Array(singleProduct?.roundedRating).fill(0)
-    : [];
-  console.log("showSvg", numberOfSvgsArray);
+  // const getSingleData = async () => {
+  //   try {
+  //     let api = await axios.get(`https://fakestoreapi.com/products/${id}`);
+  //     let data = api.data;
+  //     setShowLoader(false);
+  //     let updateObject = {
+  //       ...data,
+  //       roundedRating: Math.round(data.rating.rate),
+  //     };
+  //     setSingleProduct(updateObject);
+  //     console.log("data", data);
+  //   } catch (err) {
+  //     console.log("err", err);
+  //     setShowLoader(false);
+  //   }
+  // };
+
+  // let numberOfSvgsArray = singleProduct?.rating.rate
+  //   ? new Array(singleProduct?.roundedRating).fill(0)
+  //   : [];
+  // console.log("showSvg", numberOfSvgsArray);
 
   return (
     <>
@@ -51,12 +71,12 @@ const ProductDetails = () => {
       ) : null}
 
       {singleProduct ? (
-        <div className="bg-gray-100">
+        <div className="bg-white-100">
           <div className="container mx-auto px-4 py-8">
             <div className="flex flex-wrap -mx-4">
               <div className="w-full md:w-1/2 px-4 mb-8">
                 <img
-                  src={singleProduct?.image}
+                  src={singleProduct?.imageUrl}
                   alt="Product"
                   className="w-full h-auto rounded-lg shadow-md mb-4"
                   id="mainImage"
@@ -93,13 +113,13 @@ const ProductDetails = () => {
                 <h2 className="text-3xl font-bold mb-2">
                   {singleProduct?.title}
                 </h2>
-                <p className="text-gray-600 mb-4">{singleProduct?.category}</p>
+                {/* <p className="text-gray-600 mb-4">{singleProduct?.category}</p> */}
                 <div className="mb-4">
                   <span className="text-2xl font-bold mr-2">
                     ${singleProduct?.price}
                   </span>
                 </div>
-                <div className="flex items-center mb-4">
+                {/* <div className="flex items-center mb-4">
                   {numberOfSvgsArray?.map(() => {
                     return (
                       <svg
@@ -120,7 +140,7 @@ const ProductDetails = () => {
                   <span className="ml-2 text-gray-600">
                     {singleProduct?.roundedRating}
                   </span>
-                </div>
+                </div> */}
                 <p className="text-gray-700 mb-6">
                   {singleProduct?.description}
                 </p>
@@ -136,8 +156,8 @@ const ProductDetails = () => {
                       className="size-6"
                     >
                       <path
-                        stroke-linecap="round"
-                        trokeLinejoin="round"
+                        strokeLinecap="round"
+                        trokelinejoin="round"
                         d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
                       />
                     </svg>
