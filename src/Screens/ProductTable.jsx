@@ -4,7 +4,8 @@ import { db } from "../Components/firebase";
 import Loader from "../Assets/svg/loader";
 import NavBar from "../Components/NavBar";
 import { useNavigate } from "react-router-dom";
-import { PRODUCT_FORM, PRODUCT_TABLE } from "../Utils/constants";
+import { PRODUCT_FORM } from "../Utils/constants";
+import Toast from "../Assets/svg/toast";
 
 const ProductTable = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const ProductTable = () => {
   const [showLoader, setShowLoader] = useState(true);
   const [isModalOpen, setModalOpen] = useState(false);
   const [deletingProductId, setDeletingProductId] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     productTableData();
@@ -25,6 +27,7 @@ const ProductTable = () => {
       setShowLoader(false);
     } catch (error) {
       setShowLoader(false);
+      setErrorMessage(true);
     }
   };
 
@@ -38,9 +41,10 @@ const ProductTable = () => {
       await deleteDoc(doc(db, "Products", deletingProductId));
       console.log("record deleted");
       setShowLoader(false);
-      setModalOpen(false)
+      setModalOpen(false);
     } catch (error) {
       console.log(error.message);
+      setErrorMessage(true);
     }
   };
 
@@ -61,6 +65,8 @@ const ProductTable = () => {
           <span className="sr-only">Loading...</span>
         </div>
       ) : null}
+
+      {errorMessage ? <Toast /> : null}
 
       <NavBar />
 

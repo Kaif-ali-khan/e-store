@@ -2,38 +2,61 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../Assets/svg/loader";
 import NavBar from "../Components/NavBar";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../Components/firebase";
+// import { doc, getDoc } from "firebase/firestore";
+// import { db } from "../Components/firebase";
+import { useGetSingleProductQuery } from "../features/api/productApi";
 
 const ProductDetails = () => {
   const { id } = useParams();
   console.log(id);
 
-  const [singleProduct, setSingleProduct] = useState();
-  const [showLoader, setShowLoader] = useState(true);
+  const {
+    data: singleProduct,
+    error,
+    isLoading,
+  } = useGetSingleProductQuery(id);
 
-  useEffect(() => {
-    // getSingleData();
-    getFirebaseSingleProductDetails();
-  }, []);
+  if (isLoading) {
+    return (
+      <div
+        role="status"
+        className="flex flex-row min-h-screen justify-center items-center"
+      >
+        <Loader />
+        <span className="sr-only">Loading...</span>
+      </div>
+    );
+  }
 
-  const getFirebaseSingleProductDetails = async () => {
-    try {
-      const docRef = doc(db, "Products", id);
-      const docSnap = await getDoc(docRef);
+  if (error) {
+    return <p>Something went wrong: {error.message}</p>;
+  }
 
-      if (docSnap.exists()) {
-        console.log("Document data:", setSingleProduct(docSnap.data()));
-      } else {
-        console.log("No such document!");
-      }
+  // const [singleProduct, setSingleProduct] = useState();
+  // const [showLoader, setShowLoader] = useState(true);
 
-      setShowLoader(false);
-    } catch (error) {
-      console.log(error)
-      setShowLoader(false);
-    }
-  };
+  // useEffect(() => {
+  //   // getSingleData();
+  //   getFirebaseSingleProductDetails();
+  // }, []);
+
+  // const getFirebaseSingleProductDetails = async () => {
+  //   try {
+  //     const docRef = doc(db, "Products", id);
+  //     const docSnap = await getDoc(docRef);
+
+  //     if (docSnap.exists()) {
+  //       console.log("Document data:", setSingleProduct(docSnap.data()));
+  //     } else {
+  //       console.log("No such document!");
+  //     }
+
+  //     setShowLoader(false);
+  //   } catch (error) {
+  //     console.log(error)
+  //     setShowLoader(false);
+  //   }
+  // };
 
   // const getSingleData = async () => {
   //   try {
@@ -60,7 +83,7 @@ const ProductDetails = () => {
   return (
     <>
       <NavBar />
-      {showLoader ? (
+      {/* {showLoader ? (
         <div
           role="status"
           className="flex flex-row min-h-screen justify-center items-center"
@@ -68,7 +91,7 @@ const ProductDetails = () => {
           <Loader />
           <span className="sr-only">Loading...</span>
         </div>
-      ) : null}
+      ) : null} */}
 
       {singleProduct ? (
         <div className="bg-white-100">

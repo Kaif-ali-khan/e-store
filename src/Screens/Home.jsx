@@ -1,31 +1,47 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+// import { useState } from "react";
 import Loader from "../Assets/svg/loader";
 import { Link } from "react-router-dom";
 import { PRODUCTDETAILS_PATH } from "../Utils/constants";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../Components/firebase";
+import { useGetProductsQuery } from "../features/api/productApi";
 
 const Home = () => {
-  const [productsData, setProductsData] = useState([]);
-  const [showMessage, setshowMessage] = useState(false);
-  const [showLoader, setShowLoader] = useState(true);
+  // const [productsData, setProductsData] = useState([]);
+  // const [showMessage, setshowMessage] = useState(false);
+  // const [showLoader, setShowLoader] = useState(true);
 
-  useEffect(() => {
-    // getData();
-    getFirebaseData();
-  }, []);
+  const { data: productsData, error, isLoading } = useGetProductsQuery();
+   
+  if (isLoading) {
+    return (
+      <div
+        role="status"
+        className="flex flex-row min-h-screen justify-center items-center"
+      >
+        <Loader />
+        <span className="sr-only">Loading...</span>
+      </div>
+    );
+  }
 
-  const getFirebaseData = async () => {
-    try {
-      const data = await getDocs(collection(db, "Products"));
-      const pdata = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-      setProductsData(pdata);
-      setShowLoader(false);
-    } catch (error) {
-      setShowLoader(false);
-    }
-  };
+  if (error) {
+    return <p>Something went wrong: {error.message}</p>;
+  }
+
+  // useEffect(() => {
+  //   // getData();
+  //   getFirebaseData();
+  // }, []);
+
+  // const getFirebaseData = async () => {
+  //   try {
+  //     const data = await getDocs(collection(db, "Products"));
+  //     const pdata = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  //     setProductsData(pdata);
+  //     setShowLoader(false);
+  //   } catch (error) {
+  //     setShowLoader(false);
+  //   }
+  // };
 
   // const getData = async () => {
   //   try {
@@ -42,16 +58,6 @@ const Home = () => {
 
   return (
     <>
-      {showLoader ? (
-        <div
-          role="status"
-          className="flex flex-row min-h-screen justify-center items-center"
-        >
-          <Loader />
-          <span className="sr-only">Loading...</span>
-        </div>
-      ) : null}
-
       <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-10 m-8">
         {productsData?.length
           ? productsData?.map((card) => (
@@ -136,8 +142,6 @@ const Home = () => {
             ))
           : null}
       </div>
-
-      {showMessage ? <p>Something went Wrong</p> : null}
     </>
   );
 };
