@@ -1,50 +1,39 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HOME_PATH, SIGNUP_PATH } from "../Utils/constants";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../Components/firebase";
-import { useDispatch } from "react-redux";
-import { saveUser } from "../features/login";
-import { getDoc, doc } from "firebase/firestore";
-import { db } from "../Components/firebase";
 import Toast from "../Assets/svg/toast";
 import Loader from "../Assets/svg/loader";
+import { useLoginMutation } from "../features/api/auth";
+import Input from "../Components/Input";
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  const [userEmail, setUserEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState();
+  const [userEmail, setUserEmail] = useState();
+  const [password, setPassword] = useState();
+  // const [message, setMessage] = useState();
   const [errorMessage, setErrorMessage] = useState();
-  const [showLoader, setShowLoader] = useState(false);
-
-  const dispatch = useDispatch();
+  const [login] = useLoginMutation();
+  // const [showLoader, setShowLoader] = useState(false);
 
   const onLogin = async () => {
+    if (!userEmail || !userEmail.includes("@")) {
+      console.log("Invalid email format.");
+      return;
+    }
+    if (!password) {
+      console.log("Password cannot be empty.");
+      return;
+    }
     try {
-      setShowLoader(true);
-      const firebaseLogin = await signInWithEmailAndPassword(
-        auth,
-        userEmail,
-        password
-      );
-      console.log("firebaseLogin", firebaseLogin);
-
-      const docRef = doc(db, "Users", firebaseLogin?.user?.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        dispatch(saveUser(docSnap?.data()));
-      } else {
-        console.log("No such document!");
+      const result = await login({ userEmail, password });
+      console.log("result", result);
+      if (result?.data) {
+        navigate(HOME_PATH);
       }
-
-      navigate(HOME_PATH);
-      setShowLoader(false);
     } catch (error) {
-      console.log(error.message);
-      setErrorMessage(true);
+      console.log("Login failed:", error.message);
+      // You can also display this error to the user
     }
   };
 
@@ -60,8 +49,6 @@ const LoginPage = () => {
 
   return (
     <>
-      
-
       {errorMessage ? <Toast /> : null}
 
       <div className="bg-gray-100 flex justify-center items-center h-screen">
@@ -80,27 +67,17 @@ const LoginPage = () => {
             <label htmlFor="username" className="block text-gray-600">
               Email
             </label>
-            <input
-              type="email"
-              id="username"
-              name="username"
-              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              autoComplete="off"
-              onChange={onChangeEmail}
-            />
+            <Input type={"email"} onChange={onChangeEmail} value={userEmail} />
           </div>
 
           <div className="mb-4">
             <label htmlFor="password" className="block text-gray-600">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              autoComplete="off"
+            <Input
+              type={"password"}
               onChange={onChangePassword}
+              value={password}
             />
           </div>
 
@@ -123,18 +100,18 @@ const LoginPage = () => {
           </div>
 
           <button
-            type="submit"
+            // type="submit"
             className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full flex justify-around"
             onClick={onLogin}
-            disabled={userEmail.length < 3 && password.length < 6}
+            disabled={userEmail?.length < 3 && password?.length < 6}
           >
             Login
-            {showLoader ? (
-                  <div role="status">
-                    <Loader />
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                ) : null}
+            {/* {isLoading ? (
+              <div role="status">
+                <Loader />
+                <span className="sr-only">Loading...</span>
+              </div>
+            ) : null} */}
           </button>
 
           {/* </form> */}
@@ -145,9 +122,9 @@ const LoginPage = () => {
             </Link>
             <br />
 
-            {message ? (
+            {/* {message ? (
               <p style={{ color: message.color }}>{message.msg}</p>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
       </div>

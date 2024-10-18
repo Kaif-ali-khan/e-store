@@ -6,6 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import s
 import { useParams } from "react-router-dom";
 import Loader from "../Assets/svg/loader";
 import Toast from "../Assets/svg/toast";
+import Input from "../Components/Input";
 
 const AddProductForm = () => {
   const [productTitle, setProductTitle] = useState("abc");
@@ -134,11 +135,8 @@ const AddProductForm = () => {
           >
             Product Title
           </label>
-          <input
-            type="text"
-            id="productTitle"
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-            required
+          <Input
+            type={Text}
             onChange={productTitleInput}
             value={productTitle}
           />
@@ -167,11 +165,8 @@ const AddProductForm = () => {
           >
             Product Price
           </label>
-          <input
-            type="number"
-            id="productPrice"
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-            required
+          <Input
+            type={Number}
             onChange={productPriceInput}
             value={productPrice}
           />
@@ -184,11 +179,8 @@ const AddProductForm = () => {
           >
             Product Quantity
           </label>
-          <input
-            type="number"
-            id="productQuantity"
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-            required
+          <Input
+            type={Number}
             onChange={productQuantityInput}
             value={productQuantity}
           />
@@ -201,13 +193,7 @@ const AddProductForm = () => {
           >
             Upload file
           </label>
-          <input
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-            aria-describedby="user_avatar_help"
-            id="user_avatar"
-            type="file"
-            onChange={handleImageChange}
-          />
+          <Input type={"file"} onChange={handleImageChange} />
         </div>
 
         <button

@@ -2,7 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getDocs, collection, getDoc, doc } from "firebase/firestore";
 import { db } from "../../Components/firebase";
 
-export const api = createApi({
+export const productsApi = createApi({
+  reducerPath: "productsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }), // Adjust your base URL if needed
   endpoints: (builder) => ({
     getProducts: builder.query({
@@ -47,7 +48,4 @@ export const api = createApi({
 });
 
 // Make sure to export the `api` object
-export const {
-  useGetProductsQuery,
-  useGetSingleProductQuery,
-} = api;
+export const { useGetProductsQuery, useGetSingleProductQuery } = productsApi;

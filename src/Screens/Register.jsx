@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, db } from "../Components/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
 import { LOGIN_PATH } from "../Utils/constants";
 import Toast from "../Assets/svg/toast";
 import Loader from "../Assets/svg/loader";
+import { useRegisterMutation } from "../features/api/auth";
+import Input from "../Components/Input";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -16,28 +15,19 @@ const Register = () => {
   const [userPassword, setUserPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState();
   const [showLoader, setShowLoader] = useState(false);
+  const [register] = useRegisterMutation();
 
   const onRegister = async () => {
     try {
-      setShowLoader(true);
-      const firebaseData = await createUserWithEmailAndPassword(
-        auth,
+      const result = await register({
         userEmail,
-        userPassword
-      );
-      console.log("firebaseData", firebaseData);
-      const user = auth.currentUser;
-      console.log("user", user);
-      console.log("user Successfull", user.userEmail);
-      if (user) {
-        await setDoc(doc(db, "Users", user.uid), {
-          name: userName,
-          phone: userPhone,
-          email: userEmail,
-          password: userPassword,
-        });
+        userPassword,
+        userPhone,
+        userName,
+      });
+      console.log("result", result);
+      if (result) {
         navigate(LOGIN_PATH);
-        setShowLoader(false);
       }
     } catch (error) {
       console.log(error.message);
@@ -69,13 +59,9 @@ const Register = () => {
                   >
                     Name
                   </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="type name here"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
+                  <Input
+                    type={"text"}
+                    placeholder={"Type Name Here"}
                     onChange={onChangeName}
                   />
                 </div>
@@ -86,13 +72,9 @@ const Register = () => {
                   >
                     Phone
                   </label>
-                  <input
-                    type="number"
-                    name="number"
-                    id="number"
-                    placeholder="phone number"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
+                  <Input
+                    type={"number"}
+                    placeholder={"Phone Number"}
                     onChange={onChangePhone}
                   />
                 </div>
@@ -104,13 +86,9 @@ const Register = () => {
                   >
                     Your email
                   </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
-                    required=""
+                  <Input
+                    type={"email"}
+                    placeholder={"name@company.com"}
                     onChange={onChangeEmail}
                   />
                 </div>
@@ -121,13 +99,9 @@ const Register = () => {
                   >
                     Password
                   </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
+                  <Input
+                    type={"password"}
+                    placeholder={"••••••••"}
                     onChange={onChangePassword}
                   />
                 </div>
@@ -138,11 +112,11 @@ const Register = () => {
                 >
                   Create an account
                   {showLoader ? (
-                  <div role="status">
-                    <Loader />
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                ) : null}
+                    <div role="status">
+                      <Loader />
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  ) : null}
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
