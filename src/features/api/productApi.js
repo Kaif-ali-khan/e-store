@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getDocs, collection, getDoc, doc } from "firebase/firestore";
-import { db } from "../../Components/firebase";
+import { db } from "../../Config/firebase";
 
 export const productsApi = createApi({
   reducerPath: "productsApi",

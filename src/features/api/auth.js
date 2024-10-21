@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { auth, db } from "../../Components/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { saveUser } from "../login";
+import { auth, db } from "../../Config/firebase";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -39,11 +39,7 @@ export const authApi = createApi({
     register: builder.mutation({
       queryFn: async ({ userEmail, userPassword, userName, userPhone }) => {
         try {
-          const firebaseData = await createUserWithEmailAndPassword(
-            auth,
-            userEmail,
-            userPassword
-          );
+          await createUserWithEmailAndPassword(auth, userEmail, userPassword);
 
           const user = auth.currentUser;
           if (user) {

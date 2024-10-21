@@ -2,19 +2,18 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HOME_PATH, SIGNUP_PATH } from "../Utils/constants";
 import Toast from "../Assets/svg/toast";
-import Loader from "../Assets/svg/loader";
 import { useLoginMutation } from "../features/api/auth";
 import Input from "../Components/Input";
+import Button from "../Components/Button";
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
   const [userEmail, setUserEmail] = useState();
   const [password, setPassword] = useState();
-  // const [message, setMessage] = useState();
   const [errorMessage, setErrorMessage] = useState();
   const [login] = useLoginMutation();
-  // const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
 
   const onLogin = async () => {
     if (!userEmail || !userEmail.includes("@")) {
@@ -26,14 +25,17 @@ const LoginPage = () => {
       return;
     }
     try {
+      setShowLoader(true);
       const result = await login({ userEmail, password });
       console.log("result", result);
       if (result?.data) {
         navigate(HOME_PATH);
       }
+      setShowLoader(false);
     } catch (error) {
       console.log("Login failed:", error.message);
       // You can also display this error to the user
+      setShowLoader(false);
     }
   };
 
@@ -64,33 +66,21 @@ const LoginPage = () => {
           <h1 className="text-2xl font-semibold mb-4">Login</h1>
           {/* <form action="#" method="POST"> */}
           <div className="mb-4">
-            <label htmlFor="username" className="block text-gray-600">
-              Email
-            </label>
-            <Input type={"email"} onChange={onChangeEmail} value={userEmail} />
+            <Input
+              type={"email"}
+              onChange={onChangeEmail}
+              value={userEmail}
+              labelText="Email"
+            />
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-gray-600">
-              Password
-            </label>
             <Input
               type={"password"}
               onChange={onChangePassword}
               value={password}
+              labelText="Password"
             />
-          </div>
-
-          <div className="mb-4 flex items-center">
-            <input
-              type="checkbox"
-              id="remember"
-              name="remember"
-              className="text-blue-500"
-            />
-            <label htmlFor="remember" className="text-gray-600 ml-2">
-              Remember Me
-            </label>
           </div>
 
           <div className="mb-6 text-blue-500">
@@ -99,20 +89,12 @@ const LoginPage = () => {
             </a>
           </div>
 
-          <button
-            // type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full flex justify-around"
+          <Button
             onClick={onLogin}
+            text="Login"
             disabled={userEmail?.length < 3 && password?.length < 6}
-          >
-            Login
-            {/* {isLoading ? (
-              <div role="status">
-                <Loader />
-                <span className="sr-only">Loading...</span>
-              </div>
-            ) : null} */}
-          </button>
+            showLoader={showLoader}
+          />
 
           {/* </form> */}
 
@@ -121,10 +103,6 @@ const LoginPage = () => {
               Sign up Here
             </Link>
             <br />
-
-            {/* {message ? (
-              <p style={{ color: message.color }}>{message.msg}</p>
-            ) : null} */}
           </div>
         </div>
       </div>

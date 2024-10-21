@@ -1,16 +1,67 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../Components/NavBar";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db, storage } from "../Components/firebase";
+import { db, storage } from "../Config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import storage functions
 import { useParams } from "react-router-dom";
 import Loader from "../Assets/svg/loader";
 import Toast from "../Assets/svg/toast";
 import Input from "../Components/Input";
+import Button from "../Components/Button";
+import Label from "../Components/Label";
+
+const categories = [
+  {
+    id: 1,
+    name: "Men",
+    isActive: true,
+    isDeleted: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    updatedBy: 1,
+  },
+  {
+    id: 2,
+    name: "Women",
+    isActive: true,
+    isDeleted: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    updatedBy: 1,
+  },
+  {
+    id: 3,
+    name: "Kids",
+    isActive: true,
+    isDeleted: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    updatedBy: 1,
+  },
+  {
+    id: 4,
+    name: "Jewelery",
+    isActive: true,
+    isDeleted: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    updatedBy: 1,
+  },
+  {
+    id: 5,
+    name: "Electronics",
+    isActive: true,
+    isDeleted: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    updatedBy: 1,
+  },
+];
 
 const AddProductForm = () => {
   const [productTitle, setProductTitle] = useState("abc");
   const [productDescription, setProductDescription] = useState("abc");
+  const [productCategoryId, setProductCategoryId] = useState();
   const [productPrice, setProductPrice] = useState(88);
   const [productQuantity, setProductQuantity] = useState(88);
   const [imageFile, setImageFile] = useState(null);
@@ -22,6 +73,7 @@ const AddProductForm = () => {
 
   const productTitleInput = (e) => setProductTitle(e.target.value);
   const productDescriptionInput = (e) => setProductDescription(e.target.value);
+  const productCategoryIdInput = (e) => setProductCategoryId(e.target.value);
   const productPriceInput = (e) => setProductPrice(Number(e.target.value));
   const productQuantityInput = (e) =>
     setProductQuantity(Number(e.target.value));
@@ -48,6 +100,7 @@ const AddProductForm = () => {
       let saveDoc = await addDoc(collection(db, "Products"), {
         title: productTitle,
         description: productDescription,
+        categoryId: productCategoryId,
         price: productPrice,
         quantity: productQuantity,
         imageUrl: imageUrl, // Save the image URL
@@ -77,6 +130,7 @@ const AddProductForm = () => {
       let docUpdate = await updateDoc(doc(db, "Products", id), {
         title: productTitle,
         description: productDescription,
+        categoryId: productCategoryId,
         price: productPrice,
         quantity: productQuantity,
         imageUrl: imageUrl,
@@ -104,6 +158,7 @@ const AddProductForm = () => {
           // console.log("docSnap", docSnap.data());
           setProductTitle(docSnap.data().title);
           setProductDescription(docSnap.data().description);
+          setProductCategoryId(docSnap.data().productCategoryId);
           setProductPrice(docSnap.data().price);
           setProductQuantity(docSnap.data().quantity);
           setImageFile(docSnap.data().imageUrl);
@@ -129,12 +184,7 @@ const AddProductForm = () => {
         onSubmit={id ? updateProduct : addProductBtn}
       >
         <div className="mb-5">
-          <label
-            htmlFor="productTitle"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Product Title
-          </label>
+          <Label text="Product Title" />
           <Input
             type={Text}
             onChange={productTitleInput}
@@ -143,12 +193,7 @@ const AddProductForm = () => {
         </div>
 
         <div className="mb-5">
-          <label
-            htmlFor="productDescription"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Product Description
-          </label>
+          <Label text="Product Description" />
           <textarea
             id="productDescription"
             rows="4"
@@ -159,12 +204,16 @@ const AddProductForm = () => {
         </div>
 
         <div className="mb-5">
-          <label
-            htmlFor="productPrice"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Product Price
-          </label>
+          <Label text="Categories" />
+          <select name="cars" id="cars" onChange={productCategoryIdInput}>
+            {categories?.map((data) => {
+              return <option value={data?.id}>{data?.name}</option>;
+            })}
+          </select>
+        </div>
+
+        <div className="mb-5">
+          <Label text="Product Price" />
           <Input
             type={Number}
             onChange={productPriceInput}
@@ -173,12 +222,7 @@ const AddProductForm = () => {
         </div>
 
         <div className="mb-5">
-          <label
-            htmlFor="productQuantity"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Product Quantity
-          </label>
+          <Label text="Product Quantity" />
           <Input
             type={Number}
             onChange={productQuantityInput}
@@ -187,27 +231,21 @@ const AddProductForm = () => {
         </div>
 
         <div className="mb-5">
-          <label
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            htmlFor="user_avatar"
-          >
-            Upload file
-          </label>
+          <Label text="Upload file" />
           <Input type={"file"} onChange={handleImageChange} />
         </div>
 
-        <button
-          type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex gap-5"
-        >
-          {id ? "Edit Product" : "Add Product"}
-          {showLoader ? (
-            <div role="status">
-              <Loader />
-              <span className="sr-only">Loading...</span>
-            </div>
-          ) : null}
-        </button>
+        <Button
+          text={id ? "Edit Product" : "Add Product"}
+          showLoader={
+            showLoader ? (
+              <div role="status">
+                <Loader />
+                <span className="sr-only">Loading...</span>
+              </div>
+            ) : null
+          }
+        />
       </form>
     </>
   );

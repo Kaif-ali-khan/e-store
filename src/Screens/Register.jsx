@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_PATH } from "../Utils/constants";
 import Toast from "../Assets/svg/toast";
-import Loader from "../Assets/svg/loader";
 import { useRegisterMutation } from "../features/api/auth";
 import Input from "../Components/Input";
+import Button from "../Components/Button";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -19,6 +19,7 @@ const Register = () => {
 
   const onRegister = async () => {
     try {
+      setShowLoader(true);
       const result = await register({
         userEmail,
         userPassword,
@@ -29,9 +30,11 @@ const Register = () => {
       if (result) {
         navigate(LOGIN_PATH);
       }
+      setShowLoader(false);
     } catch (error) {
       console.log(error.message);
       setErrorMessage(true);
+      setShowLoader(false);
     }
   };
 
@@ -53,79 +56,54 @@ const Register = () => {
               </h1>
               <form className="space-y-4 md:space-y-6 " action="#">
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Name
-                  </label>
                   <Input
                     type={"text"}
                     placeholder={"Type Name Here"}
                     onChange={onChangeName}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="number"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Phone
-                  </label>
-                  <Input
-                    type={"number"}
-                    placeholder={"Phone Number"}
-                    onChange={onChangePhone}
+                    labelText="Name"
                   />
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Your email
-                  </label>
+                  <Input
+                    type={"number"}
+                    placeholder={"Phone Number"}
+                    onChange={onChangePhone}
+                    labelText="Phone"
+                  />
+                </div>
+
+                <div>
                   <Input
                     type={"email"}
                     placeholder={"name@company.com"}
                     onChange={onChangeEmail}
+                    labelText="Email"
                   />
                 </div>
+
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
                   <Input
                     type={"password"}
                     placeholder={"••••••••"}
                     onChange={onChangePassword}
+                    labelText="Password"
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 flex justify-around"
+                <Button
                   onClick={onRegister}
-                >
-                  Create an account
-                  {showLoader ? (
-                    <div role="status">
-                      <Loader />
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : null}
-                </button>
+                  text="Register"
+                  showLoader={showLoader}
+                />
+
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
-                  <a
-                    href="#"
+                  <Link
+                    to={LOGIN_PATH}
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Login here
-                  </a>
+                  </Link>
                 </p>
               </form>
             </div>

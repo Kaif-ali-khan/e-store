@@ -1,11 +1,12 @@
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { db } from "../Components/firebase";
 import Loader from "../Assets/svg/loader";
 import NavBar from "../Components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { PRODUCT_FORM } from "../Utils/constants";
 import Toast from "../Assets/svg/toast";
+import Button from "../Components/Button";
+import { db } from "../Config/firebase";
 
 const ProductTable = () => {
   const navigate = useNavigate();
@@ -112,23 +113,20 @@ const ProductTable = () => {
                       <td className="px-6 py-4">{data?.quantity}</td>
                       <td className="px-6 py-4">{data?.price}</td>
                       <td className="px-6 py-4">
-                        <a
-                          href="#"
-                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        <Button
                           onClick={() => handleEdit(data.id)}
-                        >
-                          Edit
-                        </a>
-                        <a
-                          href="#"
-                          className="font-medium text-red-600 dark:text-blue-500 hover:underline ml-5"
+                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                          text="Edit"
+                        />
+
+                        <Button
                           onClick={() => {
                             openModal();
                             setDeletingProductId(data.id);
                           }}
-                        >
-                          Remove
-                        </a>
+                          className="font-medium text-red-600 dark:text-blue-500 hover:underline ml-5"
+                          text="Remove"
+                        />
                       </td>
                     </tr>
                   );
@@ -150,32 +148,24 @@ const ProductTable = () => {
               <h3 id="modal-title" className="text-lg font-bold">
                 Confirmation
               </h3>
-              <button onClick={closeModal} className="text-gray-500">
-                &times;
-              </button>
+              <Button onClick={closeModal} className="text-gray-500" text="x" />
             </div>
             <div className="mt-4">
               <p>Are you sure you want to delete?</p>
             </div>
             <div className="mt-4 flex justify-end">
-              <button
+              <Button
                 onClick={closeModal}
                 className="py-2 px-4 bg-gray-200 rounded mr-2"
-              >
-                Close
-              </button>
-              <button
-                className="py-2 px-4 bg-red-600 text-white rounded flex gap-3"
+                text="Close"
+              />
+
+              <Button
                 onClick={() => handleDelete()}
-              >
-                Delete
-                {showLoader ? (
-                  <div role="status">
-                    <Loader />
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                ) : null}
-              </button>
+                className="py-2 px-4 bg-red-600 text-white rounded flex gap-3"
+                showLoader={showLoader}
+                text="Delete"
+              />
             </div>
           </div>
         </div>
