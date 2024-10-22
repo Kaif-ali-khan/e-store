@@ -5,7 +5,7 @@ const PRODUCTDETAILS_PATH = (id) => `/productsdetails/${id || ":id"}`;
 const PRODUCT_FORM = (id) => `/addProductForm/${id || ":id"}`;
 const ADDPRODUCT_FORM = "/addProductForm";
 const PRODUCT_TABLE = "/productTable";
-// const CATEGORIES_FORM = (id) => `/categoriesForm/${id || ":id"}`;
+const CATEGORIES_FORM = (id) => `/categoriesForm/${id || ":id"}`;
 const ADDCATEGORIES_FORM = "/addcategoriesForm";
 const CATEGORIES_TABLE = "/categoriesTable";
 
@@ -17,7 +17,7 @@ export {
   PRODUCT_FORM,
   PRODUCT_TABLE,
   ADDPRODUCT_FORM,
-  // CATEGORIES_FORM,
+  CATEGORIES_FORM,
   CATEGORIES_TABLE,
   ADDCATEGORIES_FORM,
 };

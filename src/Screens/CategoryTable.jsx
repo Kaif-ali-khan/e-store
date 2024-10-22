@@ -33,9 +33,9 @@ const CategoryTable = () => {
     }
   };
 
-  //   const handleEdit = (id) => {
-  //     navigate(CATEGORIES_FORM(id));
-  //   };
+  const handleEdit = (id) => {
+    navigate(CATEGORIES_FORM(id));
+  };
 
   const handleDelete = async () => {
     try {
@@ -112,13 +112,13 @@ const CategoryTable = () => {
                       >
                         {data?.name}
                       </th>
-                      <td className="px-6 py-4">{data?.isActive}</td>
-                      <td className="px-6 py-4">{new Date(data?.createdAt).toString()}</td>
+                      <td className="px-6 py-4">{data?.isActive ? "Yes" : "No"}</td>
+                      <td className="px-6 py-4">{data?.createdAt}</td>
                       <td className="px-6 py-4">{data?.updatedAt}</td>
                       <td className="px-6 py-4">{data?.updatedBy}</td>
                       <td className="px-6 py-4">
                         <Button
-                          // onClick={() => handleEdit(data.id)}
+                          onClick={() => handleEdit(data?.id)}
                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                           text="Edit"
                         />

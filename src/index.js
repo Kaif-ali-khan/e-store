@@ -21,6 +21,7 @@ import {
   ADDPRODUCT_FORM,
   CATEGORIES_TABLE,
   ADDCATEGORIES_FORM,
+  CATEGORIES_FORM,
 } from "./Utils/constants";
 import ProductDetails from "./Screens/ProductDetails";
 import AddProductForm from "./Screens/AddProductForm";
@@ -87,14 +88,14 @@ const router = createBrowserRouter([
       </>
     ),
   },
-  // {
-  //   path: CATEGORIES_FORM(),
-  //   element: (
-  //     <>
-  //       <CategoriesForm />
-  //     </>
-  //   ),
-  // },
+  {
+    path: CATEGORIES_FORM(),
+    element: (
+      <>
+        <CategoriesForm />
+      </>
+    ),
+  },
 
   {
     path: ADDCATEGORIES_FORM,
