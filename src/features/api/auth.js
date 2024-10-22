@@ -24,7 +24,13 @@ export const authApi = createApi({
           const docSnap = await getDoc(docRef);
 
           if (docSnap.exists()) {
-            dispatch(saveUser(docSnap?.data()));
+            const obj = {
+              ...docSnap?.data(),
+              id: firebaseLogin?.user?.uid,
+            };
+
+            dispatch(saveUser(obj));
+            console.log("obj", obj);
           } else {
             console.log("No such document!");
           }

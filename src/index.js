@@ -19,10 +19,14 @@ import {
   PRODUCT_FORM,
   PRODUCT_TABLE,
   ADDPRODUCT_FORM,
+  CATEGORIES_TABLE,
+  ADDCATEGORIES_FORM,
 } from "./Utils/constants";
 import ProductDetails from "./Screens/ProductDetails";
 import AddProductForm from "./Screens/AddProductForm";
 import ProductTable from "./Screens/ProductTable";
+import CategoriesForm from "./Screens/CategoriesForm";
+import CategoryTable from "./Screens/CategoryTable";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +84,31 @@ const router = createBrowserRouter([
     element: (
       <>
         <ProductTable />
+      </>
+    ),
+  },
+  // {
+  //   path: CATEGORIES_FORM(),
+  //   element: (
+  //     <>
+  //       <CategoriesForm />
+  //     </>
+  //   ),
+  // },
+
+  {
+    path: ADDCATEGORIES_FORM,
+    element: (
+      <>
+        <CategoriesForm />
+      </>
+    ),
+  },
+  {
+    path: CATEGORIES_TABLE,
+    element: (
+      <>
+        <CategoryTable />
       </>
     ),
   },
