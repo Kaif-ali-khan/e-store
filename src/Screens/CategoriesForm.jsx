@@ -55,16 +55,18 @@ const CategoriesForm = () => {
   };
 
   const updateCategory = async () => {
+    const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
     try {
       setShowLoader(true);
-      const data =  {
+      const data = {
         name: category,
         isActive: isActive,
-      }
+        updatedAt: date,
+        updatedBy: userId,
+      };
 
-      console.log("data", data)
+      console.log("data", data);
       let categoryDocUpdate = await updateDoc(doc(db, "Categories", id), data);
-
 
       console.log("categoryDocUpdate", categoryDocUpdate);
       setShowLoader(false);

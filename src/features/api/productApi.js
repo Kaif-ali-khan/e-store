@@ -27,13 +27,27 @@ export const productsApi = createApi({
           console.log("id", id);
           const docRef = doc(db, "Products", id);
           const docSnap = await getDoc(docRef);
-
           if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
+            const docRefOfCategory = doc(
+              db,
+              "Categories",
+              docSnap.data().categoryId
+            );
+            const categoryDoc = await getDoc(docRefOfCategory);
+            const categoryData = categoryDoc.data();
+            console.log("Document data:", categoryData);
+
+            const newObj = {
+              ...docSnap.data(),
+              categoryData: categoryData,
+            };
+
+            console.log("newObj", newObj);
+            return { data: newObj };
           } else {
             console.log("No such document!");
           }
-          return { data: docSnap.data() };
+          /// replace docSnap.data to newObj
         } catch (error) {
           return { error: { message: error.message } };
         }

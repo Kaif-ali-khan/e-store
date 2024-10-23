@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../Components/NavBar";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db, storage } from "../Config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import storage functions
 import { useParams } from "react-router-dom";
@@ -67,6 +74,7 @@ const AddProductForm = () => {
   const [imageFile, setImageFile] = useState(null);
   const [showLoader, setShowLoader] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
+  const [categoryData, setCategoryData] = useState();
 
   const { id } = useParams();
   // console.log(id);
@@ -172,6 +180,23 @@ const AddProductForm = () => {
     }
   };
 
+  useEffect(() => {
+    categoryGetData();
+  }, []);
+
+  const categoryGetData = async () => {
+    try {
+      const data = await getDocs(collection(db, "Categories"));
+      const pdata = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setCategoryData(pdata);
+      console.log("pdata", pdata);
+      setShowLoader(false);
+    } catch (error) {
+      setShowLoader(false);
+      setErrorMessage(true);
+    }
+  };
+
   return (
     <>
       <NavBar />
@@ -206,7 +231,7 @@ const AddProductForm = () => {
         <div className="mb-5">
           <Label text="Categories" />
           <select name="cars" id="cars" onChange={productCategoryIdInput}>
-            {categories?.map((data) => {
+            {categoryData?.map((data) => {
               return <option value={data?.id}>{data?.name}</option>;
             })}
           </select>

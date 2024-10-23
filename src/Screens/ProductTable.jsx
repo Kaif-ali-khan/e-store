@@ -15,22 +15,49 @@ const ProductTable = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [deletingProductId, setDeletingProductId] = useState();
   const [errorMessage, setErrorMessage] = useState();
+  const [categoryData, setCategoryData] = useState();
 
   useEffect(() => {
-    productTableData();
+    // productTableData();
+    // categoryGetData();
+    fetchProductAndCategoryData();
   }, []);
 
-  const productTableData = async () => {
+
+  const fetchProductAndCategoryData = async () => {
     try {
-      const data = await getDocs(collection(db, "Products"));
-      const pdata = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-      setProductTable(pdata);
-      setShowLoader(false);
+      setShowLoader(true); // Show loader before starting the fetch
+  
+      const [productData, categoryData] = await Promise.all([
+        getDocs(collection(db, "Products")),
+        getDocs(collection(db, "Categories")),
+      ]);
+  
+      const products = productData.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      const categories = categoryData.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  
+      setProductTable(products);
+      setCategoryData(categories);
+  
+      setShowLoader(false); // Hide loader after data is fetched
     } catch (error) {
-      setShowLoader(false);
-      setErrorMessage(true);
+      setShowLoader(false); // Hide loader if there's an error
+      setErrorMessage(true); // Show error message
     }
   };
+  
+
+  // const productTableData = async () => {
+  //   try {
+  //     const data = await getDocs(collection(db, "Products"));
+  //     const pdata = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  //     setProductTable(pdata);
+  //     setShowLoader(false);
+  //   } catch (error) {
+  //     setShowLoader(false);
+  //     setErrorMessage(true);
+  //   }
+  // };
 
   const handleEdit = (id) => {
     navigate(PRODUCT_FORM(id));
@@ -53,7 +80,20 @@ const ProductTable = () => {
   const closeModal = () => {
     setModalOpen(false);
     setDeletingProductId();
-  }; // Function to close modal
+  };
+
+  // const categoryGetData = async () => {
+  //   try {
+  //     const data = await getDocs(collection(db, "Categories"));
+  //     const pdata = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  //     setCategoryData(pdata);
+  //     console.log("pdata", pdata);
+  //     setShowLoader(false);
+  //   } catch (error) {
+  //     setShowLoader(false);
+  //     setErrorMessage(true);
+  //   }
+  // };
 
   return (
     <>
@@ -85,6 +125,9 @@ const ProductTable = () => {
                 Description
               </th>
               <th scope="col" className="px-6 py-3">
+                Category
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Price
               </th>
               <th scope="col" className="px-6 py-3">
@@ -98,6 +141,9 @@ const ProductTable = () => {
           <tbody>
             {productTable?.length
               ? productTable?.map((data) => {
+                  const category = categoryData?.find(
+                    (get) => get.id === data.categoryId
+                  );
                   return (
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <td className="w-4 p-4">
@@ -110,7 +156,9 @@ const ProductTable = () => {
                         {data?.title}
                       </th>
                       <td className="px-6 py-4">{data?.description}</td>
+                      <td className="px-6 py-4">{category?.name}</td>
                       <td className="px-6 py-4">{data?.quantity}</td>
+
                       <td className="px-6 py-4">{data?.price}</td>
                       <td className="px-6 py-4">
                         <Button

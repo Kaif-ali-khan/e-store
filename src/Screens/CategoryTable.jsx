@@ -112,7 +112,9 @@ const CategoryTable = () => {
                       >
                         {data?.name}
                       </th>
-                      <td className="px-6 py-4">{data?.isActive ? "Yes" : "No"}</td>
+                      <td className="px-6 py-4">
+                        {data?.isActive ? "Yes" : "No"}
+                      </td>
                       <td className="px-6 py-4">{data?.createdAt}</td>
                       <td className="px-6 py-4">{data?.updatedAt}</td>
                       <td className="px-6 py-4">{data?.updatedBy}</td>
