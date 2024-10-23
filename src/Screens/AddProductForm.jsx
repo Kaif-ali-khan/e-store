@@ -205,7 +205,7 @@ const AddProductForm = () => {
         {id ? "Edit Product" : "Add Product"}
       </h1>
       <form
-        className="max-w-sm ml-20 mt-5"
+        className="max-w-md ml-20 mt-5"
         onSubmit={id ? updateProduct : addProductBtn}
       >
         <div className="mb-5">
@@ -228,31 +228,38 @@ const AddProductForm = () => {
           ></textarea>
         </div>
 
-        <div className="mb-5">
-          <Label text="Categories" />
-          <select name="cars" id="cars" onChange={productCategoryIdInput}>
-            {categoryData?.map((data) => {
-              return <option value={data?.id}>{data?.name}</option>;
-            })}
-          </select>
-        </div>
+        <div className="flex gap-5">
+          <div className="mb-5">
+            <Label text="Categories" />
+            <select
+              name="cars"
+              id="cars"
+              onChange={productCategoryIdInput}
+              className="border h-10"
+            >
+              {categoryData?.map((data) => {
+                return <option value={data?.id}>{data?.name}</option>;
+              })}
+            </select>
+          </div>
 
-        <div className="mb-5">
-          <Label text="Product Price" />
-          <Input
-            type={Number}
-            onChange={productPriceInput}
-            value={productPrice}
-          />
-        </div>
+          <div>
+            <Label text="Product Price" />
+            <Input
+              type={Number}
+              onChange={productPriceInput}
+              value={productPrice}
+            />
+          </div>
 
-        <div className="mb-5">
-          <Label text="Product Quantity" />
-          <Input
-            type={Number}
-            onChange={productQuantityInput}
-            value={productQuantity}
-          />
+          <div className="mb-5">
+            <Label text="Product Quantity" />
+            <Input
+              type={Number}
+              onChange={productQuantityInput}
+              value={productQuantity}
+            />
+          </div>
         </div>
 
         <div className="mb-5">

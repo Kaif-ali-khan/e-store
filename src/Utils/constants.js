@@ -4,10 +4,10 @@ const SIGNUP_PATH = "/register";
 const PRODUCTDETAILS_PATH = (id) => `/productsdetails/${id || ":id"}`;
 const PRODUCT_FORM = (id) => `/addProductForm/${id || ":id"}`;
 const ADDPRODUCT_FORM = "/addProductForm";
-const PRODUCT_TABLE = "/productTable";
+const PRODUCT_TABLE = "/products";
 const CATEGORIES_FORM = (id) => `/categoriesForm/${id || ":id"}`;
 const ADDCATEGORIES_FORM = "/addcategoriesForm";
-const CATEGORIES_TABLE = "/categoriesTable";
+const CATEGORIES_TABLE = "/categories";
 
 export {
   LOGIN_PATH,
