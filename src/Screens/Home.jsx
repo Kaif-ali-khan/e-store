@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../Config/firebase";
 import { useLazyGetProductsQuery } from "../features/api/productApi";
+import Footer from "../Components/Footer";
 
 const Home = () => {
   const [getProducts, { data: productsData, error, isLoading }] =
@@ -96,7 +97,7 @@ const Home = () => {
                     {card.price}
                   </span>
                   <Button
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     text="Add To Cart"
                   />
                 </div>
@@ -107,6 +108,8 @@ const Home = () => {
           <h1>No Products in this category</h1>
         )}
       </div>
+
+      <Footer />
     </>
   );
 };

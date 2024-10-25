@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../Components/NavBar";
 import {
   addDoc,
   collection,
@@ -153,15 +152,6 @@ const AddProductForm = () => {
 
   return (
     <>
-      <NavBar />
-      {/* {errorMessage ? <Toast /> : null} */}
-      <h1 className="max-w-sm ml-20 mt-5 text-3xl font-semibold">
-        {id ? "Edit Product" : "Add Product"}
-      </h1>
-      {/* <form
-        className="max-w-md ml-20 mt-5"
-        onSubmit={}
-      > */}
       <div className="max-w-md ml-20 mt-5">
         <div className="mb-5">
           <Label text="Product Title" />

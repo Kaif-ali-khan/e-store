@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import Label from "../Components/Label";
-import NavBar from "../Components/NavBar";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
@@ -103,8 +102,6 @@ const CategoriesForm = () => {
 
   return (
     <>
-      <NavBar />
-
       <section className=" dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow-lg dark:border md:mt-4 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">

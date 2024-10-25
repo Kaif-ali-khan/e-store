@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import Loader from "../Assets/svg/loader";
-import NavBar from "../Components/NavBar";
 import { useGetSingleProductQuery } from "../features/api/productApi";
 import Button from "../Components/Button";
 
@@ -33,8 +32,6 @@ const ProductDetails = () => {
 
   return (
     <>
-      <NavBar />
-
       {singleProduct ? (
         <div className="bg-white-100">
           <div className="container mx-auto px-4 py-8">
@@ -43,17 +40,17 @@ const ProductDetails = () => {
                 <img
                   src={singleProduct?.imageUrl}
                   alt="Product"
-                  className="w-full h-auto rounded-lg shadow-md mb-4"
+                  className="w-full h-3/4 object-cover rounded-lg shadow-md mb-4"
                   id="mainImage"
                 />
               </div>
 
               <div className="w-full md:w-1/2 px-4">
-                <h2 className="text-3xl font-bold mb-2">
+                <h2 className="text-3xl font-bold mb-6">
                   {singleProduct?.title}
                 </h2>
 
-                <div className="mb-4">
+                <div className="mb-6">
                   <span className="text-2xl font-bold mr-2">
                     {singleProduct?.categoryData?.name}
                   </span>
@@ -71,7 +68,7 @@ const ProductDetails = () => {
 
                 <div className="flex space-x-4 mb-6">
                   <Button
-                    className="bg-indigo-600 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="bg-indigo-600 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 font-semibold"
                     text="Add to Cart"
                   />
                 </div>

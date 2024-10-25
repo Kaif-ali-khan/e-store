@@ -2,14 +2,12 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { db } from "../Config/firebase";
 import Loader from "../Assets/svg/loader";
 import Toast from "../Assets/svg/toast";
-import NavBar from "../Components/NavBar";
 import Button from "../Components/Button";
 import { ADDCATEGORIES_FORM, CATEGORIES_FORM } from "../Utils/constants";
 import { useNavigate } from "react-router-dom";
@@ -92,8 +90,6 @@ const CategoryTable = () => {
       ) : null}
 
       {errorMessage ? <Toast /> : null}
-
-      <NavBar />
 
       <div className=" w-5/6 m-auto">
         <div className="w-full flex justify-between m-auto mt-12">

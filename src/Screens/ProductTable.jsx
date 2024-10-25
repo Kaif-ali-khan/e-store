@@ -1,7 +1,6 @@
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Loader from "../Assets/svg/loader";
-import NavBar from "../Components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { ADDPRODUCT_FORM, PRODUCT_FORM } from "../Utils/constants";
 import Toast from "../Assets/svg/toast";
@@ -90,7 +89,6 @@ const ProductTable = () => {
 
       {errorMessage ? <Toast /> : null}
 
-      <NavBar />
       <div className="w-11/12 lg:w-5/6 mx-auto flex-nowrap">
         <div className="w-full flex flex-col md:flex-row justify-between items-center mt-12">
           <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-0">Products</h1>

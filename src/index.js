@@ -4,7 +4,6 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoginPage from "./Screens/Login";
-import NavBar from "./Components/NavBar";
 import Home from "./Screens/Home";
 import Register from "./Screens/Register";
 import { Provider } from "react-redux";
@@ -28,13 +27,16 @@ import AddProductForm from "./Screens/AddProductForm";
 import ProductTable from "./Screens/ProductTable";
 import CategoriesForm from "./Screens/CategoriesForm";
 import CategoryTable from "./Screens/CategoryTable";
+import Wrapper from "./Components/Wrapper";
 
 const router = createBrowserRouter([
   {
     path: HOME_PATH,
     element: (
       <>
-        <NavBar /> <Home />
+        <Wrapper>
+          <Home />
+        </Wrapper>
       </>
     ),
   },
@@ -58,7 +60,9 @@ const router = createBrowserRouter([
     path: PRODUCTDETAILS_PATH(), // "/productdetails/:id"
     element: (
       <>
-        <ProductDetails />
+        <Wrapper>
+          <ProductDetails />
+        </Wrapper>
       </>
     ),
   },
@@ -66,7 +70,9 @@ const router = createBrowserRouter([
     path: PRODUCT_FORM(),
     element: (
       <>
-        <AddProductForm />
+        <Wrapper>
+          <AddProductForm />
+        </Wrapper>
       </>
     ),
   },
@@ -75,7 +81,9 @@ const router = createBrowserRouter([
     path: ADDPRODUCT_FORM,
     element: (
       <>
-        <AddProductForm />
+        <Wrapper>
+          <AddProductForm />
+        </Wrapper>
       </>
     ),
   },
@@ -84,7 +92,9 @@ const router = createBrowserRouter([
     path: PRODUCT_TABLE,
     element: (
       <>
-        <ProductTable />
+        <Wrapper>
+          <ProductTable />
+        </Wrapper>
       </>
     ),
   },
@@ -92,7 +102,9 @@ const router = createBrowserRouter([
     path: CATEGORIES_FORM(),
     element: (
       <>
-        <CategoriesForm />
+        <Wrapper>
+          <CategoriesForm />
+        </Wrapper>
       </>
     ),
   },
@@ -101,7 +113,9 @@ const router = createBrowserRouter([
     path: ADDCATEGORIES_FORM,
     element: (
       <>
-        <CategoriesForm />
+        <Wrapper>
+          <CategoriesForm />
+        </Wrapper>
       </>
     ),
   },
@@ -109,7 +123,9 @@ const router = createBrowserRouter([
     path: CATEGORIES_TABLE,
     element: (
       <>
-        <CategoryTable />
+        <Wrapper>
+          <CategoryTable />
+        </Wrapper>
       </>
     ),
   },
