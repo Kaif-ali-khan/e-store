@@ -12,58 +12,10 @@ import { db, storage } from "../Config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Import storage functions
 import { useParams } from "react-router-dom";
 import Loader from "../Assets/svg/loader";
-import Toast from "../Assets/svg/toast";
+// import Toast from "../Assets/svg/toast";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import Label from "../Components/Label";
-
-const categories = [
-  {
-    id: 1,
-    name: "Men",
-    isActive: true,
-    isDeleted: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    updatedBy: 1,
-  },
-  {
-    id: 2,
-    name: "Women",
-    isActive: true,
-    isDeleted: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    updatedBy: 1,
-  },
-  {
-    id: 3,
-    name: "Kids",
-    isActive: true,
-    isDeleted: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    updatedBy: 1,
-  },
-  {
-    id: 4,
-    name: "Jewelery",
-    isActive: true,
-    isDeleted: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    updatedBy: 1,
-  },
-  {
-    id: 5,
-    name: "Electronics",
-    isActive: true,
-    isDeleted: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    updatedBy: 1,
-  },
-];
 
 const AddProductForm = () => {
   const [productTitle, setProductTitle] = useState("abc");
@@ -81,7 +33,10 @@ const AddProductForm = () => {
 
   const productTitleInput = (e) => setProductTitle(e.target.value);
   const productDescriptionInput = (e) => setProductDescription(e.target.value);
-  const productCategoryIdInput = (e) => setProductCategoryId(e.target.value);
+  const productCategoryIdInput = (e) => {
+    setProductCategoryId(e.target.value);
+    console.log("categoryID", productCategoryId);
+  };
   const productPriceInput = (e) => setProductPrice(Number(e.target.value));
   const productQuantityInput = (e) =>
     setProductQuantity(Number(e.target.value));
@@ -135,16 +90,19 @@ const AddProductForm = () => {
         console.log("imageUrl", imageUrl);
       }
 
-      let docUpdate = await updateDoc(doc(db, "Products", id), {
+      const data = {
         title: productTitle,
         description: productDescription,
         categoryId: productCategoryId,
         price: productPrice,
         quantity: productQuantity,
         imageUrl: imageUrl,
-      });
+      };
+      console.log("productData", data);
+      let docUpdate = await updateDoc(doc(db, "Products", id), data);
 
       console.log("updateDoc", docUpdate);
+
       setShowLoader(false);
     } catch (error) {
       console.log(error);
@@ -155,6 +113,7 @@ const AddProductForm = () => {
 
   useEffect(() => {
     getFirebaseValue();
+    categoryGetData();
   }, []);
 
   const getFirebaseValue = async () => {
@@ -166,7 +125,7 @@ const AddProductForm = () => {
           // console.log("docSnap", docSnap.data());
           setProductTitle(docSnap.data().title);
           setProductDescription(docSnap.data().description);
-          setProductCategoryId(docSnap.data().productCategoryId);
+          setProductCategoryId(docSnap.data().categoryId);
           setProductPrice(docSnap.data().price);
           setProductQuantity(docSnap.data().quantity);
           setImageFile(docSnap.data().imageUrl);
@@ -179,17 +138,12 @@ const AddProductForm = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    categoryGetData();
-  }, []);
-
   const categoryGetData = async () => {
     try {
       const data = await getDocs(collection(db, "Categories"));
       const pdata = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       setCategoryData(pdata);
-      console.log("pdata", pdata);
+      // console.log("pdata", pdata);
       setShowLoader(false);
     } catch (error) {
       setShowLoader(false);
@@ -200,14 +154,15 @@ const AddProductForm = () => {
   return (
     <>
       <NavBar />
-      {errorMessage ? <Toast /> : null}
+      {/* {errorMessage ? <Toast /> : null} */}
       <h1 className="max-w-sm ml-20 mt-5 text-3xl font-semibold">
         {id ? "Edit Product" : "Add Product"}
       </h1>
-      <form
+      {/* <form
         className="max-w-md ml-20 mt-5"
-        onSubmit={id ? updateProduct : addProductBtn}
-      >
+        onSubmit={}
+      > */}
+      <div className="max-w-md ml-20 mt-5">
         <div className="mb-5">
           <Label text="Product Title" />
           <Input
@@ -231,12 +186,8 @@ const AddProductForm = () => {
         <div className="flex gap-5">
           <div className="mb-5">
             <Label text="Categories" />
-            <select
-              name="cars"
-              id="cars"
-              onChange={productCategoryIdInput}
-              className="border h-10"
-            >
+            <select onChange={productCategoryIdInput} className="border h-10">
+              Select
               {categoryData?.map((data) => {
                 return <option value={data?.id}>{data?.name}</option>;
               })}
@@ -264,11 +215,12 @@ const AddProductForm = () => {
 
         <div className="mb-5">
           <Label text="Upload file" />
-          <Input type={"file"} onChange={handleImageChange} />
+          <Input type="file" onChange={handleImageChange} />
         </div>
 
         <Button
           text={id ? "Edit Product" : "Add Product"}
+          onClick={id ? updateProduct : addProductBtn}
           showLoader={
             showLoader ? (
               <div role="status">
@@ -278,7 +230,8 @@ const AddProductForm = () => {
             ) : null
           }
         />
-      </form>
+      </div>
+      {/* </form> */}
     </>
   );
 };

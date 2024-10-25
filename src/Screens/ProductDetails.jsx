@@ -1,37 +1,19 @@
-import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../Assets/svg/loader";
 import NavBar from "../Components/NavBar";
 import { useGetSingleProductQuery } from "../features/api/productApi";
 import Button from "../Components/Button";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../Config/firebase";
+
 
 const ProductDetails = () => {
   const { id } = useParams();
-  // const [categoryName, setCategoryName] = useState("");
+  
 
   const {
     data: singleProduct,
     error,
     isLoading,
   } = useGetSingleProductQuery(id);
-
-  // useEffect(() => {
-  //   if (singleProduct) {
-  //     categoryGetData(singleProduct.categoryId);
-  //   }
-  // }, [singleProduct]);
-
-  // const categoryGetData = async (id) => {
-  //   try {
-      
-  //       setCategoryName();
-
-  //   } catch (error) {
-  //     console.log("error from  categoryGetData", error);
-  //   }
-  // };
 
   if (isLoading) {
     return (

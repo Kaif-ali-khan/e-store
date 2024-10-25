@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { HOME_PATH, SIGNUP_PATH } from "../Utils/constants";
 import Toast from "../Assets/svg/toast";
 import { useLoginMutation } from "../features/api/auth";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
+import Anchor from "../Components/Anchor";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -99,9 +100,11 @@ const LoginPage = () => {
           {/* </form> */}
 
           <div className="mt-6 text-blue-500 text-center">
-            <Link to={SIGNUP_PATH} className="hover:underline">
-              Sign up Here
-            </Link>
+            <Anchor
+              to={SIGNUP_PATH}
+              text={"Sign up Here"}
+              className={"hover:underline"}
+            />
             <br />
           </div>
         </div>

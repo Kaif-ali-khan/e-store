@@ -1,8 +1,5 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
-  ADDCATEGORIES_FORM,
-  ADDPRODUCT_FORM,
-  CATEGORIES_FORM,
   CATEGORIES_TABLE,
   HOME_PATH,
   LOGIN_PATH,
@@ -12,10 +9,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../features/login";
 import { signOut } from "firebase/auth";
 import { auth } from "../Config/firebase";
+import Anchor from "../Components/Anchor";
+import ToggleBtn from "./ToggleBtn";
 
 const NavBar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const state = useSelector((state) => state?.login);
-
   const dispatch = useDispatch();
 
   const logout = async () => {
@@ -28,80 +27,90 @@ const NavBar = () => {
     }
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <nav className="bg-white border-gray-500 dark:bg-gray-900 dark:border-gray-700 shadow-md">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link
+        <Anchor
           to={HOME_PATH}
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            E-Store
-          </span>
-        </Link>
+          text={"E-Store"}
+          className="self-center text-3xl font-semibold whitespace-nowrap dark:text-white"
+        />
+        <ToggleBtn onClick={toggleMenu} isMenuOpen={isMenuOpen} />
 
-        <button
-          data-collapse-toggle="navbar-dropdown"
-          type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="navbar-dropdown"
-          aria-expanded="false"
+        {/* Full-Screen Mobile Menu */}
+        <div
+          className={`fixed inset-0 bg-white transform ${
+            isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 ease-in-out md:hidden z-50`}
         >
-          <span className="sr-only">Open main menu</span>
-          <svg
-            className="w-5 h-5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 17 14"
+          <button
+            onClick={toggleMenu}
+            className="absolute top-4 right-4 text-black text-3xl"
           >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M1 1h15M1 7h15M1 13h15"
-            />
-          </svg>
-        </button>
-
-        <div className="hidden w-full md:block md:w-auto" id="navbar-dropdown">
-          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+            &times;
+          </button>
+          <ul className="flex flex-col items-center justify-center h-full space-y-6 text-center text-black text-xl">
             {state?.user?.isAdmin ? (
               <>
-                <Link
+                <Anchor
                   to={PRODUCT_TABLE}
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Products
-                </Link>
-                <Link
+                  onClick={toggleMenu}
+                  text={"Products"}
+                />
+                <Anchor
                   to={CATEGORIES_TABLE}
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Categories
-                </Link>
+                  onClick={toggleMenu}
+                  text={"Categories"}
+                />
               </>
             ) : null}
 
-            <h3 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
-              {state?.user?.name}
-            </h3>
+            <h3 className="block py-2 px-3 rounded">{state?.user?.name}</h3>
             <li>
               {state?.user ? (
-                <p
-                  onClick={logout}
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent cursor-pointer"
-                >
-                  Logout
-                </p>
+                <Anchor
+                  onClick={() => {
+                    logout();
+                    toggleMenu();
+                  }}
+                  text={"Login"}
+                />
               ) : (
-                <Link
-                  to={LOGIN_PATH}
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                >
-                  Login
-                </Link>
+                <Anchor to={LOGIN_PATH} text={"Login"} />
+              )}
+            </li>
+          </ul>
+        </div>
+
+        {/* Desktop Menu */}
+        <div
+          className={`hidden w-full md:block md:w-auto`}
+          id="navbar-dropdown"
+        >
+          <ul className="flex flex-col items-center font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+            {state?.user?.isAdmin ? (
+              <>
+                <Anchor to={PRODUCT_TABLE} text="Products" />
+                <Anchor to={CATEGORIES_TABLE} text="Categories" />
+              </>
+            ) : null}
+
+            <div className="flex gap-4 items-center">
+              <h3 className="block py-2 px-3 text-gray-900 rounded hover:bg-blue-100 hover:border-b-2 hover:border-blue-500 hover:font-medium md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+                {state?.user?.name}
+              </h3>
+
+              <img src={state?.user?.imageUrl} className="w-12 rounded-full" />
+            </div>
+            <li>
+              {state?.user ? (
+                <Anchor onClick={logout} text={"logout"} />
+              ) : (
+                <Anchor to={LOGIN_PATH} text={"Login"} />
               )}
             </li>
           </ul>

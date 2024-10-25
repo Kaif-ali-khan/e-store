@@ -5,7 +5,8 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { saveUser } from "../login";
-import { auth, db } from "../../Config/firebase";
+import { auth, db, storage } from "../../Config/firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -43,17 +44,34 @@ export const authApi = createApi({
       },
     }),
     register: builder.mutation({
-      queryFn: async ({ userEmail, userPassword, userName, userPhone }) => {
+      queryFn: async ({
+        userEmail,
+        userPassword,
+        userName,
+        userPhone,
+        uploadImage,
+      }) => {
         try {
           await createUserWithEmailAndPassword(auth, userEmail, userPassword);
 
           const user = auth.currentUser;
+
+          let imageUrl = "";
+
+          // Upload image if one is selected
+          if (uploadImage) {
+            const imageRef = ref(storage, `user-images/${uploadImage.name}`);
+            await uploadBytes(imageRef, uploadImage); // Upload the file
+            imageUrl = await getDownloadURL(imageRef); // Get the file URL
+            console.log("imageUrl", imageUrl);
+          }
           if (user) {
             await setDoc(doc(db, "Users", user.uid), {
               name: userName,
               phone: userPhone,
               email: userEmail,
               password: userPassword,
+              imageUrl: imageUrl,
             });
           }
 

@@ -62,4 +62,8 @@ export const productsApi = createApi({
 });
 
 // Make sure to export the `api` object
-export const { useGetProductsQuery, useGetSingleProductQuery } = productsApi;
+export const {
+  useGetProductsQuery,
+  useGetSingleProductQuery,
+  useLazyGetProductsQuery,
+} = productsApi;

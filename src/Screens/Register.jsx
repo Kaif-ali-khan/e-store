@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { LOGIN_PATH } from "../Utils/constants";
 import Toast from "../Assets/svg/toast";
 import { useRegisterMutation } from "../features/api/auth";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
+import Anchor from "../Components/Anchor";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ const Register = () => {
   const [userPassword, setUserPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState();
   const [showLoader, setShowLoader] = useState(false);
+  const [uploadImage, setUploadImage] = useState();
+
   const [register] = useRegisterMutation();
 
   const onRegister = async () => {
@@ -25,6 +28,7 @@ const Register = () => {
         userPassword,
         userPhone,
         userName,
+        uploadImage,
       });
       console.log("result", result);
       if (result) {
@@ -42,6 +46,10 @@ const Register = () => {
   const onChangePhone = (e) => setUserPhone(e.target.value);
   const onChangeEmail = (e) => setUserEmail(e.target.value);
   const onChangePassword = (e) => setUserPassword(e.target.value);
+  const onUploadImage = (e) => {
+    setUploadImage(e.target.files[0]);
+    console.log("Click");
+  };
 
   return (
     <>
@@ -90,6 +98,13 @@ const Register = () => {
                     labelText="Password"
                   />
                 </div>
+                <div>
+                  <Input
+                    type={"file"}
+                    onChange={onUploadImage}
+                    labelText="Upload Image"
+                  />
+                </div>
                 <Button
                   onClick={onRegister}
                   text="Register"
@@ -98,12 +113,11 @@ const Register = () => {
 
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
-                  <Link
+                  <Anchor
                     to={LOGIN_PATH}
+                    text={"Login here"}
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                  >
-                    Login here
-                  </Link>
+                  />
                 </p>
               </form>
             </div>
