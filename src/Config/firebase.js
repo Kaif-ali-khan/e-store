@@ -24,8 +24,9 @@ export const db = initializeFirestore(app, {
   experimentalForceLongPolling: true, // Enable long polling
   useFetchStreams: false,
 });
+
 export const auth = getAuth();
-export const storage = getStorage(app); // Initialize Storage
+export const storage = getStorage(app);// Initialize Storage
 // export const db = getFirestore(app);
 
 export default app;

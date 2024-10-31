@@ -8,6 +8,7 @@ const PRODUCT_TABLE = "/products";
 const CATEGORIES_FORM = (id) => `/categoriesForm/${id || ":id"}`;
 const ADDCATEGORIES_FORM = "/addcategoriesForm";
 const CATEGORIES_TABLE = "/categories";
+const CARTPAGE_TABLE = "/cartpage"
 
 export {
   LOGIN_PATH,
@@ -20,4 +21,5 @@ export {
   CATEGORIES_FORM,
   CATEGORIES_TABLE,
   ADDCATEGORIES_FORM,
+  CARTPAGE_TABLE
 };

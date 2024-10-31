@@ -21,6 +21,7 @@ import {
   CATEGORIES_TABLE,
   ADDCATEGORIES_FORM,
   CATEGORIES_FORM,
+  CARTPAGE_TABLE,
 } from "./Utils/constants";
 import ProductDetails from "./Screens/ProductDetails";
 import AddProductForm from "./Screens/AddProductForm";
@@ -28,6 +29,7 @@ import ProductTable from "./Screens/ProductTable";
 import CategoriesForm from "./Screens/CategoriesForm";
 import CategoryTable from "./Screens/CategoryTable";
 import Wrapper from "./Components/Wrapper";
+import CartPage from "./Screens/CartPage";
 
 const router = createBrowserRouter([
   {
@@ -129,6 +131,17 @@ const router = createBrowserRouter([
       </>
     ),
   },
+  {
+    path: CARTPAGE_TABLE,
+    element: (
+      <>
+        <Wrapper>
+          <CartPage />
+        </Wrapper>
+      </>
+    ),
+  },
+
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

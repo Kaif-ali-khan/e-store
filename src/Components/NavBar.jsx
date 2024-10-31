@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  CARTPAGE_TABLE,
   CATEGORIES_TABLE,
   HOME_PATH,
   LOGIN_PATH,
@@ -99,12 +100,24 @@ const NavBar = () => {
               </>
             ) : null}
 
+            {state?.user ? (
+              <Anchor to={CARTPAGE_TABLE} text={"Cart-Table"} />
+            ) : null}
+
             <div className="flex gap-4 items-center">
               <h3 className="block py-2 px-3 text-gray-900 rounded hover:bg-blue-100 hover:border-b-2 hover:border-blue-500 hover:font-medium md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
                 {state?.user?.name}
               </h3>
 
-              <img src={state?.user?.imageUrl} className="w-12 rounded-full" />
+              {state?.user ? (
+                <img
+                  src={
+                    state.user.imageUrl ||
+                    "https://img.freepik.com/free-vector/mysterious-mafia-man-smoking-cigarette_52683-34828.jpg?t=st=1729864662~exp=1729868262~hmac=f7c07886d278b11b3abd0c1c57edb30f04074cf634dd7e4354e7261211de4e53&w=740"
+                  }
+                  className="w-12 rounded-full"
+                />
+              ) : null}
             </div>
             <li>
               {state?.user ? (

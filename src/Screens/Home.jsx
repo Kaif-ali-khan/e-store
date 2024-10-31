@@ -1,5 +1,5 @@
 import Loader from "../Assets/svg/loader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PRODUCTDETAILS_PATH } from "../Utils/constants";
 import Button from "../Components/Button";
 import CategoriesBtn from "../Components/CategoriesBtn";

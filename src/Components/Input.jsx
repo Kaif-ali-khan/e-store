@@ -1,10 +1,20 @@
 import React from "react";
 import Label from "./Label";
 
-const Input = ({ type, name, id, placeholder, onChange, value, labelText }) => {
+const Input = ({
+  type,
+  name,
+  id,
+  placeholder,
+  onChange,
+  value,
+  labelText,
+  min,
+  max,
+}) => {
   return (
     <>
-      {labelText ? <Label text={labelText} /> : null}       
+      {labelText ? <Label text={labelText} /> : null}
 
       <input
         type={type}
@@ -15,6 +25,8 @@ const Input = ({ type, name, id, placeholder, onChange, value, labelText }) => {
         required=""
         onChange={onChange}
         value={value}
+        min={min}
+        max={max}
       />
     </>
   );
