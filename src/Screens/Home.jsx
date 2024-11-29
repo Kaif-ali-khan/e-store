@@ -1,116 +1,105 @@
-import Loader from "../Assets/svg/loader";
-import { Link, useNavigate } from "react-router-dom";
-import { PRODUCTDETAILS_PATH } from "../Utils/constants";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { useGetProductsQuery } from "../features/api/productApi";
+import { useGetCategoriesQuery } from "../features/api/categoriesApi";
+import { Link } from "react-router-dom";
 import Button from "../Components/Button";
-import CategoriesBtn from "../Components/CategoriesBtn";
-import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../Config/firebase";
-import { useLazyGetProductsQuery } from "../features/api/productApi";
-import Footer from "../Components/Footer";
+import { PRODUCTDETAILS_PATH } from "../Utils/constants";
 
 const Home = () => {
-  const [getProducts, { data: productsData, error, isLoading }] =
-    useLazyGetProductsQuery();
+  const {
+    data: productsData,
+    isLoading: productsLoading,
+    error: productsError,
+  } = useGetProductsQuery();
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useGetCategoriesQuery();
 
-  const [categories, setCategories] = useState();
-  const [products, setProducts] = useState();
+  const searchQuery = useSelector((state) => state.products.searchQuery);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const getCategories = async () => {
-    const data = await getDocs(collection(db, "Categories"));
-    const categories = data.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    setCategories(categories);
-    console.log("btnCategories", categories);
-  };
+  if (productsLoading || categoriesLoading) return <h1>Loading...</h1>;
+  if (productsError || categoriesError) return <h1>Error loading data</h1>;
 
-  useEffect(() => {
-    getCategories();
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    const productGet = await getProducts();
-    setProducts(productGet?.data);
-  };
-  console.log("Products", products);
-
-  const filterCategories = (categoryId) => {
-    const categoriesFilter = productsData?.filter((data) => {
-      console.log("data", data);
-
-      return data.categoryId === categoryId;
-    });
-    console.log("categoryId", categoryId);
-    setProducts([...categoriesFilter]);
-    console.log("categoriesFilter", categoriesFilter);
-  };
-
-  if (isLoading) {
-    return (
-      <div
-        role="status"
-        className="flex flex-row min-h-screen justify-center items-center"
-      >
-        <Loader />
-        <span className="sr-only">Loading...</span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return <p>Something went wrong: {error.message}</p>;
-  }
+  const filteredProducts = productsData?.filter((product) => {
+    console.log("product", product);
+    const matchesCategory =
+      selectedCategory === "All" || product.categoryId === selectedCategory;
+    console.log("selectedCategory", selectedCategory);
+    const matchesSearch = product.title
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+  console.log("filteredProducts", filteredProducts);
 
   return (
-    <>
-      <div className="w-full flex justify-center mt-14 gap-5 m-auto flex-wrap p-5">
-        <CategoriesBtn text="All" onClick={fetchProducts} />
-        {categories?.map((data) => (
-          <CategoriesBtn
-            text={data?.name}
-            onClick={() => filterCategories(data?.id)}
-          />
+    <div className="m-8">
+      {/* Categories Section */}
+      <div className="flex justify-center gap-4 mb-8">
+        {/* All Category */}
+        <button
+          className={`px-4 py-2 ${
+            selectedCategory === "All"
+              ? "bg-blue-700 text-white"
+              : "bg-blue-500 text-white"
+          } rounded`}
+          onClick={() => setSelectedCategory("All")}
+        >
+          All
+        </button>
+
+        {/* Render Category Buttons */}
+        {categoriesData?.map((category) => (
+          <button
+            key={category.id}
+            className={`px-4 py-2 ${
+              selectedCategory === category.name
+                ? "bg-blue-700 text-white"
+                : "bg-blue-500 text-white"
+            } rounded`}
+            onClick={() => setSelectedCategory(category.id)}
+          >
+            {category.name}
+          </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-10 m-8">
-        {products?.length ? (
-          products?.map((card) => (
+      {/* Display Filtered Products */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+        {!filteredProducts?.length ? (
+          <p>No products found for this category or search term.</p>
+        ) : (
+          filteredProducts.map((product) => (
             <div
-              className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-              key={card.id}
+              key={product.id}
+              className="w-full max-w-sm bg-white border rounded-lg shadow"
             >
-              <Link to={PRODUCTDETAILS_PATH(card.id)}>
-                <img className="p-8 rounded-t-lg w-44" src={card.imageUrl} />
+              <Link to={PRODUCTDETAILS_PATH(product.id)}>
+                <img
+                  className="p-8 rounded-t-lg w-44"
+                  src={product.imageUrl}
+                  alt={product.title}
+                />
               </Link>
               <div className="px-5 pb-5">
-                <a href="#">
-                  <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white whitespace-nowrap w-[200px] overflow-hidden text-ellipsis m-5">
-                    {card.title}
-                  </h5>
-                </a>
+                <h5 className="text-xl font-semibold">{product.title}</h5>
                 <div className="flex items-center justify-between">
-                  <span className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {card.price}
-                  </span>
+                  <span className="text-3xl font-bold">{product.price}</span>
                   <Button
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     text="Add To Cart"
+                    className="w-50 text-white bg-blue-500 hover:bg-blue-600 font-semibold rounded-lg text-sm px-5 py-2.5"
                   />
                 </div>
               </div>
             </div>
           ))
-        ) : (
-          <h1>No Products in this category</h1>
         )}
       </div>
-
-      <Footer />
-    </>
+    </div>
   );
 };
 

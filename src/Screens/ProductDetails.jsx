@@ -17,7 +17,6 @@ const ProductDetails = () => {
 
   const {
     data: singleProduct,
-    error,
     isLoading,
   } = useGetSingleProductQuery(id);
 

@@ -15,7 +15,9 @@ import Button from "../Components/Button";
 
 const CartPage = () => {
   const userId = useSelector((state) => state?.login?.user?.id);
+  console.log("userId", userId);
   const [cartData, setCartData] = useState();
+  console.log("cartData", cartData);
   const [showLoader, setShowLoader] = useState();
   const [isModalOpen, setModalOpen] = useState(false);
   const [deletingProductId, setDeletingProductId] = useState();
@@ -29,57 +31,42 @@ const CartPage = () => {
     const docRef = doc(db, "Carts", userId);
     const docSnap = await getDoc(docRef);
     const cData = docSnap.data();
+    console.log("cData", cData);
 
     const cartItems = cData?.items;
-    // console.log("cartItems", cartItems);
-    const productIds = cartItems.map((data) => data?.productId);
-    // console.log("productIds", productIds);
+    console.log("cartItems", cartItems);
+    const productIds = cartItems?.map((data) => data?.productId) || [];
 
-    const productsRef = query(
-      collection(db, "Products"),
-      where(documentId(), "in", productIds)
-    );
+    if (productIds.length > 0) {
+      const productsRef = query(
+        collection(db, "Products"),
+        where(documentId(), "in", productIds)
+      );
 
-    // console.log("productsRef", productsRef);
+      const productsDocsSnap = await getDocs(productsRef);
+      const products = productsDocsSnap.docs.map((productDocsnap) => {
+        const data = productDocsnap.data();
+        return { ...data, id: productDocsnap.id };
+      });
 
-    const productsDocsSnap = await getDocs(productsRef);
-    console.log("productsDocsSnap", productsDocsSnap);
+      console.log("products", products);
+      const finalItems = cData?.items?.map((data) => {
+        const product = products.find((d) => data.productId === d.id);
+        return { ...product, ...data };
+      });
+      console.log("finalItems", finalItems);
 
-    const products = productsDocsSnap.docs.map((productDocsnap) => {
-      const data = productDocsnap.data();
-      return { ...data, id: productDocsnap.id };
-    });
-    // console.log("products", products);
-
-    const finalItems = cData?.items?.map((data) => {
-      // console.log("data.productId", data.productId);
-      const product = products.find((d) => data.productId === d.id);
-      // console.log("product", product);
-      return { ...product, ...data };
-    });
-
-    // console.log("finalItems", finalItems);
-
-    const obj = {
-      ...cData,
-      items: finalItems,
-    };
-    setCartData(obj);
-    // console.log("obj", obj);
+      const obj = {
+        ...cData,
+        items: finalItems,
+      };
+      setCartData(obj);
+      console.log("obj", obj);
+    } else {
+      console.log("No product IDs available to query.");
+      setCartData(cData);
+    }
   };
-
-  // const handleDelete = async () => {
-  //   try {
-  //     setShowLoader(true);
-  //     await deleteDoc(doc(db, "Carts", deletingProductId));
-  //     console.log("record deleted");
-  //     setShowLoader(false);
-  //     setModalOpen(false);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     setErrorMessage(true);
-  //   }
-  // };
 
   const removeProduct = async () => {
     try {
@@ -87,7 +74,6 @@ const CartPage = () => {
       const itemsAfterDeletingProduct = cartData?.items?.filter(
         (d) => d.id !== deletingProductId
       );
-      // console.log("itemsAfterDeletingProduct", itemsAfterDeletingProduct);
       const obj = {
         ...cartData,
         items: itemsAfterDeletingProduct,
@@ -103,7 +89,7 @@ const CartPage = () => {
     }
   };
 
-  const openModal = () => setModalOpen(true); // Function to open modal
+  const openModal = () => setModalOpen(true);
   const closeModal = () => {
     setModalOpen(false);
     setDeletingProductId();

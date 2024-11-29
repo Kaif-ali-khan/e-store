@@ -62,6 +62,7 @@ const CategoryTable = () => {
       console.log("record deleted");
       setShowLoader(false);
       setModalOpen(false);
+      categoryTableData(); // Refresh category data after deletion
     } catch (error) {
       console.log(error.message);
       setErrorMessage(true);
@@ -77,6 +78,7 @@ const CategoryTable = () => {
   const openAddCategoryForm = () => {
     navigate(ADDCATEGORIES_FORM);
   };
+
   return (
     <>
       {showLoader ? (
@@ -91,7 +93,7 @@ const CategoryTable = () => {
 
       {errorMessage ? <Toast /> : null}
 
-      <div className=" w-5/6 m-auto">
+      <div className="w-5/6 m-auto">
         <div className="w-full flex justify-between m-auto mt-12">
           <h1 className="text-3xl font-bold">Categories</h1>
           <Button
@@ -101,7 +103,7 @@ const CategoryTable = () => {
           />
         </div>
 
-        <div className=" shadow-md sm:rounded-lg mt-8 m-auto">
+        <div className="shadow-md sm:rounded-lg mt-8 m-auto">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -130,15 +132,13 @@ const CategoryTable = () => {
             </thead>
             <tbody>
               {categoryTable?.length
-                ? categoryTable?.map((data) => {
+                ? categoryTable.map((data) => {
                     const user = usersData?.find(
                       (user) => user.id === data?.updatedBy
                     );
                     return (
                       <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td className="w-4 p-4">
-                          <div className="flex items-center"></div>
-                        </td>
+                        <td className="w-4 p-4"></td>
                         <th
                           scope="row"
                           className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -157,7 +157,6 @@ const CategoryTable = () => {
                             className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                             text="Edit"
                           />
-
                           <Button
                             onClick={() => {
                               openModal();
@@ -177,7 +176,7 @@ const CategoryTable = () => {
       </div>
 
       {/* Modal Component */}
-      {isModalOpen ? ( // Render modal if isModalOpen is true
+      {isModalOpen ? (
         <div
           className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-50 flex justify-center items-center"
           role="dialog"
@@ -199,9 +198,8 @@ const CategoryTable = () => {
                 className="py-2 px-4 bg-gray-200 rounded mr-2"
                 text="Close"
               />
-
               <Button
-                onClick={() => handleDelete()}
+                onClick={handleDelete}
                 className="py-2 px-4 bg-red-600 text-white rounded flex gap-3"
                 showLoader={showLoader}
                 text="Delete"

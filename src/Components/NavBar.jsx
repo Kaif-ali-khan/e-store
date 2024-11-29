@@ -7,11 +7,12 @@ import {
   PRODUCT_TABLE,
 } from "../Utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { removeUser } from "../features/login";
+import { removeUser } from "../features/Actions/login";
 import { signOut } from "firebase/auth";
 import { auth } from "../Config/firebase";
 import Anchor from "../Components/Anchor";
 import ToggleBtn from "./ToggleBtn";
+import SearchBar from "./SearchBar";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -103,6 +104,8 @@ const NavBar = () => {
             {state?.user ? (
               <Anchor to={CARTPAGE_TABLE} text={"Cart-Table"} />
             ) : null}
+
+            <SearchBar />
 
             <div className="flex gap-4 items-center">
               <h3 className="block py-2 px-3 text-gray-900 rounded hover:bg-blue-100 hover:border-b-2 hover:border-blue-500 hover:font-medium md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">

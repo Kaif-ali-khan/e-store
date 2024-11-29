@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { saveUser } from "../login";
+import { saveUser } from "../Actions/login";
 import { auth, db, storage } from "../../Config/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
